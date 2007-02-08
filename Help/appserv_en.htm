@@ -1,0 +1,51 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<meta http-equiv="Content-Language" content="en-us">
+<title>%PROGRAMNAME% Help File - Application vs. Service</title>
+<link rel="stylesheet" type="text/css" href="CobStyle.css">
+</head>
+
+<body>
+
+<div align="center">
+	&nbsp;<table border="0" width="600" id="table1">
+		<tr>
+			<td>
+			<p class="h1-center">Application vs. service</p>
+			<p class="normal">A <b>service</b> is a special windows application 
+			that runs even if no user is logged on the system. The <b>service</b> 
+			can run under a special account (<b>LocalSystem</b> account) or 
+			under other existing account. On Windows NT, 2000 ,XP or 2003 is 
+			recommended to run this program as a service. <b>You choose if you 
+			want to run the program as a service or as an application in the 
+			installation program.</b> You can also change the way the program 
+			will work from the <b><a href="options_en.htm">Options</a></b> 
+			dialog box.</p>
+			<p class="normal">When running<b> %PROGRAMNAME%</b> as a <b>service</b>, 
+			a problem can arise: <font color="#FF00FF"><b>if you want to access 
+			a shared drive or folder or some non-local resource, you cannot run 
+			the service under the default system account.</b></font>
+			<font color="#FF00FF"><b>You must run it under an account which has 
+			network access</b></font> (example: the Administrator account). In 
+			the installation program, you can choose to configure the service to 
+			run under the system or other account. </p>
+			<p class="normal">Another difference is that <b>you cannot terminate 
+			a service </b>the same way you close an application. You stop/start 
+			a service using the Control Panel - Administrative tools - Services 
+			icon. You can also control the service from the <b>
+			<a href="options_en.htm">Options</a></b> dialog box.</p>
+			<p class="normal-center-bold"><a href="index_en.htm">Index</a></td>
+		</tr>
+		<tr>
+			<td>
+			<p class="small-center-bold">© 2000-2006 by %AUTHOR%<br>
+			All rights reserved</td>
+		</tr>
+	</table>
+</div>
+
+</body>
+
+</html>

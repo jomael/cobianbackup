@@ -1,0 +1,51 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<meta http-equiv="Content-Language" content="nl">
+<title>%PROGRAMNAME% Help File - Applicatie versus Service</title>
+<link rel="stylesheet" type="text/css" href="CobStyle.css">
+</head>
+
+<body>
+
+<div align="center">
+	&nbsp;<table border="0" width="600" id="table1">
+		<tr>
+			<td>
+			<p class="h1-center">Applicatie versus Service</p>
+			<p class="normal">Een <b>service</b> is een speciale Windows 
+			applicatie die ook draait als er geen gebruikers zijn aangemeld. Een <b>
+			service</b> 
+			kan draaien onder een speciaal account (<b>LocalSystem</b> account) 
+			of onder een ander bestaand account. Bij Windows NT, 2000, XP of 
+			2003 wordt aanbevolen het programma als een service te draaien. <b>
+			Deze keuze wordt gemaakt tijdens de installatie van het programma.</b> 
+			De manier van draaien kan ook worden aangepast via de <b>
+			<a href="options_nl.htm">Instellingen</a></b>.</p>
+			<p class="normal">Als<b> %PROGRAMNAME%</b> draait als een <b>
+			service </b>
+			kan er wel een probleem ontstaan: <font color="#FF00FF"><b>Als een 
+			shared drive of folder of enige niet locale resource wordt benaderd, 
+			kan de service niet onder de Local System account draaien.</b></font>
+			<font color="#FF00FF"><b>Deze moet dan draaien onder een account met 
+			netwerktoegang</b></font> (voorbeeld: de Administrator account). In 
+			het installatie programma kan gekozen worden om de service te 
+			draaien onder de Local System account of een ander account.</p>
+			<p class="normal">Ander verschil is het stoppen van een service of 
+			een applicatie. Het stoppen van een service kan via Windows 
+			Taakbeheer / Processen. De service kan ook worden gecontroleerd via 
+			de <b><a href="options_nl.htm">Instellingen</a></b>.</p>
+			<p class="normal-center-bold"><a href="index_nl.htm">Inhoud</a></td>
+		</tr>
+		<tr>
+			<td>
+			<p class="small-center-bold">© 2000-2006 by %AUTHOR%<br>
+			All rights reserved</td>
+		</tr>
+	</table>
+</div>
+
+</body>
+
+</html>

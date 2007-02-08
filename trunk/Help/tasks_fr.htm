@@ -1,0 +1,241 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<meta http-equiv="Content-Language" content="en-us">
+<title>Aide de %PROGRAMNAME% 8 - Tâches</title>
+<link rel="stylesheet" type="text/css" href="CobStyle.css">
+</head>
+
+<body>
+
+<div align="center">
+	<table border="0" width="600" id="table1">
+		<tr>
+			<td>
+			<p class="h1-center">Tâches</p>
+			<p class="normal">Une tâche peut être créée ou modifiée à partir du <b>
+			menu Tâche</b>.</p><p class="normal"><font color="#ff00ff"><b>Onglet 
+			Général
+			</b></font></p><p class="normal"><b>Nom de la tâche</b> - Le nom de 
+			la tâche. Il sera utilisé plusieurs fois dans le fichier journal et 
+			pour les noms des fichiers compressés. Vous pouvez laisser le nom 
+			proposé par défaut ou choisir un nom unique pour chaque tâche.</p><p class="normal"><b>
+			ID de la tâche</b> - Il s&#39;agit d&#39;un identifiant unique de chaque 
+			tâche. Vous ne pouvez pas le modifier.&nbsp; l&#39;ID est seulement 
+			utilisé en interne par le programme.</p><p class="normal"><b>
+			Désactiver</b>
+			- (décochée par défaut) Si cette option est cochée, la tâche sera 
+			ignorée lors de la sauvegarde.</p><p class="normal"><b>Inclure les 
+			sous-répertoires</b> - (cochée par défaut) Si cette option est 
+			cochée, lors de la copie de répertoire, cela copiera récursivement 
+			tous les fichiers des sous-répertoires.
+			</p><p class="normal"><b>Créer des sauvegardes séparées avec 
+			date/heure</b> - (cochée par défaut) Cela créera un nouveau fichier 
+			ou répertoire à chaque copie. La date et l&#39;heure seront ajoutées au 
+			nom de fichier. Exemple : fichier1 2002-01-11 ; 12;00.zip. Dans le 
+			cas contraire la sauvegarde sera écrasée <b>Il y a un désavantage à 
+			écraser les sauvegardes </b>: Si la sauvegarde échoue au milieu de 
+			la copie quelque soit la raison, vous aurez au final une sauvegarde 
+			erronée , car la sauvegarde précédente sera remplacée par la 
+			nouvelle erronée.</p>
+			<p class="normal">
+			<b>Purger l&#39;attribut archive</b>: Le programme utilise le bit 
+			archive d&#39;un fichier pour savoir si le fichier doit être copié lors 
+			d&#39;une sauvegarde différentielle ou incrémentielle. Si cette case est 
+			décocheé les attributs ne seront pas effacés. C&#39;est ce qu&#39;il faut 
+			faire si vous utilisez les mêmes sources dans plusieurs tâches.<p class="normal">
+			<b>Utilisez les attributs de fichiers</b> : Parfois, vous ne 
+			souhaitez pas utiliser cette méthode (par exemple, si la source est 
+			une partition Linux). Dans ce cas, vous devez décocher cette option. 
+			Le programme comparera la date et l&#39;heure du fichier source avec la 
+			destination dans le cas des copies incrémentielle et différentielle. 
+			C&#39;est une solution très <b>LIMITE</b> : cela ne marche pas avec les 
+			fichiers compressés et les fichiers par FTP.
+      <p class="normal">
+			%PROGRAMNAME% supporte 4 types de sauvegardes :</p><p class="normal"><b>
+			Complète
+			</b> : Chaque fichier de la source sera copié ou compressé. Si vous 
+			avez coché &quot;écraser les sauvegardes existantes&quot;, tous les fichiers 
+			seront remplacés. Sinon vous aurez plusieurs copies de la même 
+			source.
+			</p><p class="normal"><b>
+			Incrémentielle</b> -&nbsp; Le programme vérifiera si la source est 
+			différente<font color="#ff0000"><b> depuis la dernière sauvegarde</b></font>. 
+			Si ce n&#39;est pas le cas, il n&#39;aura pas besoin de copier le fichier, 
+			il sera ignoré, ce qui permet d&#39;éviter de le recopier. La procédure 
+			incrémentielle vérifie le bit archive des attributs du fichier. Vous 
+			pouvez manuellement réinitialiser ce dernier pour forcer une 
+			sauvegarde complète : Utiliser la fonction &quot;Réinitialiser les 
+			attributs d&#39;archives&quot; du menu Tâche.</p><p class="normal">
+			<b>Différentielle</b> : Le programme vérifiera si la source est 
+			différente
+			<b><font color="#ff0000">depuis la dernière sauvegarde COMPLETE</font></b>. 
+			Comme pour l&#39;incrémentielle, il ne copiera pas le fichier si la 
+			source n&#39;a pas été modifiée. Le fichier sera donc ignoré et la copie 
+			sera plus rapide. La procédure Différentielle vérifie le bit archive 
+			des attributs du fichier. Vous pouvez manuellement réinitialiser ce 
+			dernier pour forcer une sauvegarde complète : Utiliser la fonction 
+			&quot;Réinitialiser les attributs d&#39;archives&quot; du menu Tâche.</p><p class="normal">
+			<b>Sauvegarde factice</b> : Cette sauvegarde n&#39;a pas besoin de 
+			source ou de destination. Elle sert uniquement à planifier un 
+			évènement comme exécuter une application, fermer un service, 
+			redémarrer l&#39;ordinateur, etc.</p><p class="normal">
+			<b>Copies complètes à garder</b> : Si vos sauvegardes ne sont PAS 
+			écrasées (définie par l&#39;option &quot;écraser les sauvegardes 
+			précédentes&quot;), chaque nouvelle sauvegarde créera un nouveau fichier 
+			ou répertoire du même nom, la date et l&#39;heure seront ajoutées au 
+			nom.
+			</p><p class="normal">Par exemple: Si le fichier original est 
+			SimCity.exe, et que les sauvegardes ne sont pas écrasées, les 
+			nouvelles sauvegardes créées seront :
+			</p>
+			<p class="normal">SimCity.exe <br>
+			SimCity 2003-04-13 12;22.exe <br>
+			SimCity 2003-04-14 12;22.exe <br>
+			SimCity 2003-04-15 12;22.exe , etc </p>
+			<p class="normal">C&#39;est maintenant facile de maintenir un nombre 
+			limité de copies complètes pour chaque sauvegarde et d&#39;effacer les 
+			anciennes. Une des options permet de réaliser ceci (nombre de copies 
+			complètes à conserver), par exemple si vous ne souhaitez conserver 
+			que 2 copies complètes.<b> Il faut noter que si votre tâche est 
+			incrémentielle ou différentielle, le programme de sauvegarde 
+			conservera ou effacera le contenu entier d&#39;une sauvegarde complète 
+			et les enfants associés à cette sauvegarde.
+			</b>.</p>
+			<p class="normal">Les anciennes sauvegardes seront alors effacées. 
+			Vous pouvez toujours PARQUER une sauvegarde afin de la protéger 
+			contre l&#39;effacement. C&#39;est très important pour les sauvegardes 
+			incrémentielles quand la première sauvegarde est complète et que la 
+			suivante est partielle.</p>
+			<p class="normal"><b>Cycle des sauvegardes complètes</b>:&nbsp; Si 
+			vous avez planifiez une sauvegarde différentielle ou incrémentielle 
+			alors le programme, toutes les X sauvegardes fera une sauvegarde 
+			complète. Par exemple, si vous entrez le nombre 3, les sauvegardes 
+			3, 6, 9, 12, etc..., seront complètes. <font color="#FF0000"><b>
+			Cette fonctionnalité fonctionne seulement si vous n&#39;écrasez pas les 
+			sauvegardes</b></font>.</p>
+			<p class="normal"><font color="#ff00ff"><b>Onglet Fichiers</b></font></p>
+			<p class="normal"><b>Source</b> - Entrer les fichiers, répertoires 
+			et/ou les sources FTP à sauvegarder. Noter qu&#39;une sauvegarde VENANT 
+			d&#39;un serveur FTP doit être complète. Les autres types de sauvegardes 
+			seront ignorés et la sauvegarde sera réalisée comme sauvegarde 
+			complète. Vous devez avoir assez d&#39;espace disponible dans votre 
+			répertoire temporaire pour le téléchargement complet de votre source 
+			FTP.</p>
+			<p class="normal"><b>Destination</b> - Entrer la destination locale 
+			et/ou le répertoire FTP. Vous pouvez avoir plusieurs répertoires. 
+			Une copie sera placée dans chaque répertoire de destination.</p>
+			<p class="normal"><font color="#ff00ff"><b>Onglet Fichiers</b></font></p>
+			<p class="normal"><b>Source</b> - Entrer les fichiers, répertoires 
+			et/ou les sources FTP à sauvegarder. Noter qu&#39;une sauvegarde VENANT 
+			d&#39;un serveur FTP doit être complète. Les autres types de sauvegardes 
+			seront ignorés et la sauvegarde sera réalisée comme sauvegarde 
+			complète. Vous devez avoir assez d&#39;espace disponible dans votre 
+			répertoire temporaire pour le téléchargement complet de votre source 
+			FTP.</p>
+			<p class="normal"><b>Destination</b> - Entrer la destination locale 
+			et/ou le répertoire FTP. Vous pouvez avoir plusieurs répertoires. 
+			Une copie sera placée dans chaque répertoire de destination.</p>
+			<p class="normal"><font color="#ff00ff"><b>Onglet Planification</b></font></p>
+			<p class="normal"><b>Type de planification</b> : Permet de définir 
+			quand les tâches seront exécutées. </p>
+			<p class="normal"><b>Une fois</b> : Basiquement, les copies du 
+			fichier ou du répertoire seront réalisées à la date et l&#39;heure que 
+			vous définissez. </p>
+			<p class="normal"><b>Quotidienne</b> : Réalisée chaque jour à 
+			l&#39;heure spécifié.
+			</p>
+			<p class="normal"><b>Hebdomadaire</b> : Réalisée chaque semaine 
+			au(x) jour(s) et aux heures spécifié(s).
+			</p>
+			<p class="normal"><b>Mensuelle</b> : Réalisée une fois par mois, au 
+			jour et heure spécifiés
+			</p>
+			<p class="normal"><b>Minuterie</b> : Réalisée toutes les X minutes
+			</p>
+			<p class="normal"><b>Manuellement</b> : Réalisée uniquement si 
+			l&#39;utilisateur clique sur &quot;Lancer les sauvegardes&quot;. Non planifiée.</p>
+			<p class="normal"><font color="#ff00ff"><b>Onglet Archive</b></font></p>
+			<p class="normal"><b>Compression</b> : Choix de la méthode de 
+			compression à utiliser (aucune, Zip ou SQX)</p>
+			<p class="normal"><font color="#FF0000"><b>ATTENTION</b></font> - Si 
+			vous écrasez les sauvegardes existantes et que vous utilisez la 
+			compression, vous obtiendrez un effet de mirroir : Si un fichier est 
+			supprimé de la source, il sera AUSSI inexistant dans la sauvegarde 
+			compressé. Cela n&#39;arrive pas if la sauvegarde n&#39;est pas compressée 
+			ou si vous n&#39;écrasez les sauvegardes.</p>
+			<p class="normal"><b>Options de découpage</b> : Si cette option est 
+			cochée, l&#39;archive compressée finale sera découpée en morceaux. Très 
+			pratique si vous souhaitez copier les parties du fichier sur un 
+			support amovible.</p>
+			<p class="normal"><b>Commentaire</b>: Commentaire à inclure dans 
+			l&#39;archive</p>
+			<p class="normal"><b>Cryptage avancée</b> : Choix du cryptage à 
+			appliquer
+			</p>
+			<p class="normal"><b><a href="compenc_fr.htm">Pour plus 
+			d&#39;information à ce sujet cliquez ici</a>.</b></p>
+			<p class="normal"><font color="#ff00ff"><b>Onglet Spécial</b></font></p>
+			<p class="normal">Vous pouvez ajouter ici une liste de 
+			fichiers/répertoires à exclure ou inclure pour la sauvegarde. Vous 
+			pouvez également utiliser des masques : Exemple *.txt</p>
+			<p class="normal">Voici ce que vous pouvez faire :</p>
+			<p class="normal">1) Fichiers. Sélectionnez juste un fichier avec 
+			&quot;Ajouter fichier&quot;&quot;; button</p>
+			<p class="normal">2) Répertoires : Sélecitonnez un répertoire en 
+			cliquant sur &quot;Ajouter répertoire&quot;</p>
+			<p class="normal">3) Entrez un masque. Vous pouvez utilisez des 
+			masques simples comme *.txt pour exclure ou inclure que les fichiers 
+			de type texte ou vous pouvez utiliser des masques complexes comme </p>
+			<p class="normal">*\répertoire\*\*.txt</p>
+			<p class="normal">Cela inclura ou exclura tous les fichiers de type 
+			texte dans toute l&#39;arborescence qui contient un répertoire appelé 
+			&#39;répertoire&#39;.</p>
+      <p class="normal"><font color="#ff00ff"><b>Onglet Evènements</b></font></p>
+			<p class="normal"><b>Avant/Après la sauvegarde</b> : Vous pouvez 
+			spécifier des évènements à réaliser avant que la sauvegarde ne 
+			démarre et des évènements une fois que la sauvegarde sera terminée. 
+			Cela permettra de sauvegarder des fichiers utilisés par une autre 
+			application.<b> Avant la sauvegarde</b>, Fermer l&#39;autre application 
+			et <b>après la sauvegarde</b>, relancer la. Vous pouvez <b>
+			arrêter/démarrer des services </b>également. </p>
+			<p class="normal">Si vous utilisez l&#39;évènement &quot;Executer&quot; or 
+			&quot;Executer et attendre&quot; vous pouvez passer en paramètres la source ou 
+			la destination. Pour faire cela :</p>
+			<p class="normal">* Selectionnez un évènement et un exécutable à 
+			lancer.<br /> 
+			* Un fenêtre s&#39;ouvrira et vous demandera des paramètres. Ici vous 
+			pouvez saisir des paramètres, comme un nom de fichier, etc... </p>
+			<p class="normal">Les fichiers/répertoires doivent être passés en 
+			utilisant des guillemets pour eviter des problèmes avec les noms de 
+			fichiers longs.</p>
+			<p class="normal">Vous devez posséder les droits d&#39;administrateurs 
+			pour fermer des programmes ou démarrer/arrêter des services. </p>
+			<p class="normal"><font color="#FF00FF"><b>Onglet avancé</b></font></p>
+			<p class="normal"><b>Lancer la sauvegarde sous un autre compte 
+			utilisateur :</b> Si vous avez besoin d&#39;une tâche qui nécessite 
+			d&#39;accéder à des ressources pour lesquelles vous n&#39;avez pas les 
+			droits sélectionnez cette option et entrez le login utilisateur et 
+			son mot de passe. Quand la sauvegarde commencera, le programme 
+			essaiera de se connecter sous ce compte et reviendra sous l&#39;ancien à 
+			la fin de cette tâche.</p>
+			<p class="normal"><b>Annuler en cas d&#39;erreur</b>: Si le changement 
+			d&#39;utilisateur échoue, alors abandonner la tâche.</p>
+			<p class="normal"><b>ID</b>: nom du compte</p>
+			<p class="normal"><b>Domaine</b>: Nom du Domaine à placer devant le 
+			nom d&#39;utilisateur. Entre un point s&#39;il s&#39;agit d&#39;un compte local.</p>
+			<p class="normal"><b>Mot de passe</b> : Le mot de passe du compte.</p>
+			<p class="normal-center-bold"><a href="index_fr.htm">Index</a></td>
+		</tr>
+		<tr>
+			<td>
+			<p class="small-center-bold">©2000-2006 par %AUTHOR%<br>
+			Tous droits réservés</td>
+		</tr>
+	</table>
+</div>
+
+</body>
+
+</html>

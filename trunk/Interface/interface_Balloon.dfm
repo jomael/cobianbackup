@@ -1,0 +1,64 @@
+object form_Balloon: Tform_Balloon
+  Left = 0
+  Top = 0
+  BorderStyle = bsNone
+  BorderWidth = 2
+  ClientHeight = 42
+  ClientWidth = 372
+  Color = clSkyBlue
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -13
+  Font.Name = 'Tahoma'
+  Font.Style = [fsBold]
+  FormStyle = fsStayOnTop
+  OldCreateOrder = False
+  Scaled = False
+  OnClick = TntFormClick
+  OnClose = TntFormClose
+  OnCreate = TntFormCreate
+  PixelsPerInch = 120
+  TextHeight = 16
+  object p_Main: TTntPanel
+    Left = 0
+    Top = 0
+    Width = 372
+    Height = 42
+    Align = alClient
+    BevelInner = bvLowered
+    ParentColor = True
+    TabOrder = 0
+    object pb_Main: TTntPaintBox
+      Left = 2
+      Top = 2
+      Width = 368
+      Height = 38
+      Align = alClient
+      ExplicitLeft = 192
+      ExplicitTop = 8
+      ExplicitWidth = 105
+      ExplicitHeight = 105
+    end
+    object l_Message: TTntLabel
+      Left = 15
+      Top = 11
+      Width = 57
+      Height = 16
+      Caption = 'Message'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clBlack
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+      Transparent = True
+      OnClick = l_MessageClick
+    end
+  end
+  object timer_Hide: TTimer
+    Enabled = False
+    OnTimer = timer_HideTimer
+    Left = 272
+    Top = 8
+  end
+end

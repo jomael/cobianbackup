@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<PersonalityInfo>
+		<Option>
+			<Option Name="Personality">Default.Personality</Option>
+			<Option Name="ProjectType"></Option>
+			<Option Name="Version">1.0</Option>
+			<Option Name="GUID">{56AC1ABC-57DD-4812-BCDA-020ECC5FB09D}</Option>
+		</Option>
+	</PersonalityInfo>
+	<Default.Personality>  
+    
+    <Projects>
+      <Projects Name="Cobian.exe">Application\Cobian.bdsproj</Projects>
+      <Projects Name="cbEngine.dll">Engine\cbEngine.bdsproj</Projects>
+      <Projects Name="cbInterface.exe">Interface\cbInterface.bdsproj</Projects>
+      <Projects Name="cbNTW.dll">CobNTW\cbNTW.bdsproj</Projects>
+      <Projects Name="cbNTSecW.dll">CobNTSecW\cbNTSecW.bdsproj</Projects>
+      <Projects Name="cbDecryptorW.dll">CobDecryptorW\cbDecryptorW.bdsproj</Projects>
+      <Projects Name="cbDecryptorW.exe">CobDecryptor StandAlone\cbDecryptorW.bdsproj</Projects>
+      <Projects Name="cbService.exe">Service\cbService.bdsproj</Projects>
+      <Projects Name="cbDecompressor.exe">CobDecompressor\cbDecompressor.bdsproj</Projects>
+      <Projects Name="cbTranslator.exe">Translator\cbTranslator.bdsproj</Projects>
+      <Projects Name="cbSerial.exe">Serial generator\cbSerial.bdsproj</Projects>
+      <Projects Name="FMSImg32.dll">Fake MSImg32\FMSImg32.bdsproj</Projects>
+      <Projects Name="cbUninstall.exe">Uninstall\cbUninstall.bdsproj</Projects>
+      <Projects Name="cbSetup.exe">Setup\cbSetup.bdsproj</Projects>
+      <Projects Name="CobVSrvUI.exe">Cobian Version Server\Interface\CobVSrvUI.bdsproj</Projects>
+      <Projects Name="CobVSrv.exe">Cobian Version Server\Service\CobVSrv.bdsproj</Projects>
+      <Projects Name="cbBuilder.exe">Builder\cbBuilder.bdsproj</Projects>
+      <Projects Name="Targets">Cobian.exe cbEngine.dll cbInterface.exe cbNTW.dll cbNTSecW.dll cbDecryptorW.dll cbDecryptorW.exe cbService.exe cbDecompressor.exe cbTranslator.exe cbSerial.exe FMSImg32.dll cbUninstall.exe cbSetup.exe CobVSrvUI.exe CobVSrv.exe cbBuilder.exe</Projects>
+    </Projects>
+    <Dependencies/>
+  </Default.Personality>
+	<StarTeamAssociation></StarTeamAssociation>
+	<StarTeamNonRelativeFiles></StarTeamNonRelativeFiles>
+</BorlandProject>

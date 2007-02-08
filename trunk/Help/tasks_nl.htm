@@ -1,0 +1,196 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<meta http-equiv="Content-Language" content="nl">
+<title>%PROGRAMNAME% help files - Taken</title>
+<link rel="stylesheet" type="text/css" href="CobStyle.css">
+</head>
+
+<body>
+
+<div align="center">
+	<table border="0" width="600" id="table1">
+		<tr>
+			<td>
+			<p class="h1-center">Taken</p>
+			<p class="normal">
+			<font color="#FF00FF"><b><u>A</u>lgemeen 
+			tab</b></font><p class="normal">
+			<b>{ID}</b> - 
+			Een uniek, niet te wijzigen, identificatie ID. Dit wordt alleen 
+			intern binnen het programma gebruikt.<p class="normal"><b>Naam</b> - The naam van de taak. 
+			Deze wordt veelvuldig gebruikt in de logfile en voor de namen van 
+			archief files. De naam van een taak moet uniek zijn.<p class="normal"><b>
+			Uitgeschakeld</b> 
+			- (Standaard uit) Als deze optie aanstaat zal deze taak niet worden 
+			uitgevoerd.<p class="normal"><b>Neem onderliggende mappen mee</b> - (Standaard 
+			aan) Ook files in onderliggende directories worden gekopieerd.<p class="normal">
+			<b>Maak afzonderlijke back-ups met datum-tijd id</b> - (Standaard 
+			aan) Dit voorkomt het overschrijven van back-ups. Als deze optie uit 
+			staat en er wordt geen compressie gebruikt, dan zullen bestanden één op 
+			één worden gekopieerd met overschrijving als gevolg.<p class="normal">
+			<b>Gebruik het archiefbit - </b>Het programma gebruikt het archief 
+			bit in het attribuut van een bestand om te zien of een bestand moet 
+			worden gekopieerd bij een Oplopend of Verschillend back-up (bit aan 
+			betekent gewijzigd en dus kopiëren). 
+			<p class="normal">
+			Bij het niet gebruiken van het archiefbit worden de datums van de 
+			bron en bestemmingsfiles met elkaar vergeleken (nuttig voor Linux 
+			bestanden). Deze manier is erg gelimiteerd, het werkt niet met 
+			archieven van FTP bestanden.<p class="normal">
+			<b>Zet het archiefbit uit</b> - Bij gebruik van de archiefbit logica 
+			wordt het archief bit uitgezet na kopiëren. Als dat niet gebeurt 
+			wordt het bestand telkens meegenomen, ook in verschillend en 
+			oplopend back-ups. Het uitzetten van deze optie kan handig zijn als dezelfde files voorkomen in verschillende taken.<p class="normal">
+			<b>Soort Back-up</b> - Hier wordt gekozen om welke type back-up het 
+			gaat.<p class="normal"><b>Volledig</b> (Full) - Alle files in de 
+			bronlocatie worden meegenomen. Bij deze vorm van back-up worden de archief 
+			bits van alle files uitgezet.<p class="normal"><b>Oplopend</b> (Incremental) 
+			-&nbsp;Alle files die gewijzigd zijn
+			<font color="#FF00FF"><b>na de vorige back-up (volledig of oplopend)</b></font> 
+			worden meegenomen, d.w.z. dat alle files waarvan het archief bit aan 
+			staat worden gekopieerd. De archief bits van de gekopieerde files 
+			worden uitgezet.<p class="normal">
+			<b>Verschillend</b> (Differential) - Alle files die gewijzigd zijn <b>
+			<font color="#FF00FF">na de laatste VOLLEDIGE backup</font></b> 
+			worden meegenomen. Bij deze vorm van back-up blijven de archief bits 
+			ongewijzigd en zal een eenmalig gewijzigde file telkens weer worden 
+			gekopieerd.<p class="normal">
+			Door het 
+			handmatig aanzetten van de archief bits voor de uitvoering van een 
+			oplopend of verschillend back-up kan 
+			een volledige back-up geforceerd worden (zie &quot;Archief 
+			attributen 
+			terugzetten&quot; onder het Taak menu). <p class="normal">
+			<b>Dummy</b> - Hiermee wordt geen back-up uitgevoerd maar de taak is 
+			bruikbaar als planner voor het uitvoeren <b>Vóór en Ná</b> acties.<p class="normal">
+			<b>Volledig back-ups bewaren</b> - Bij het NIET overschrijven van 
+			bestaande back-ups zal elke nieuwe back-up dezelfde naam hebben als 
+			de bestaande maar aangevuld met een timestamp. Als bijvoorbeeld de 
+			file SimCity.exe wordt gekopieerd en de back-up is gezet op NIET 
+			overschrijven, dan zullen de volgende files gemaakt worden:<p class="normal">SimCity.exe <br>
+			SimCity 2006-04-13 12;22.exe <br>
+			SimCity 2006-04-14 12;22.exe <br>
+			SimCity 2006-04-15 12;22.exe , etc </p>
+			<p class="normal">Met deze optie kan eenvoudig worden aangegeven 
+			hoeveel volledige back-ups moeten worden bewaard. De oudere 
+			volledige back-ups worden automatisch verwijderd. <b>Bedenk dat bij 
+			gebruik van een Oplopend en Verschillend back-up de hele set van een 
+			Volledige back-up plus alle bijbehorende oplopend of verschillend 
+			back-ups meegaan bij het verwijderen van een volledige back-up.</b></p>
+			<p class="normal">Het is altijd mogelijk een back-up te beveiligen 
+			(parking) tegen automatische of handmatige verwijdering.</p>
+			<p class="normal"><b>Maak volledig back-up van iedere</b>&nbsp;- 
+			Door alleen een oplopend of verschillend back-up te gebruiken kan 
+			met deze optie iedere n-de back-up volledig gemaakt worden. 
+			Specificeer 
+			bijvoorbeeld 3, en de 3de, 6de,9de, 12de, etc. back-ups worden 
+			volledig. </p>
+			<p class="normal"><font color="#FF00FF"><b>Bestanden tab</b></font></p>
+			<p class="normal"><b>Bron</b> - Specificatie van de files 
+			en directories van de back-up. Slepen kan vanuit Windows verkenner. 
+			Bedenk dat een back-up vanuit een FTP site altijd volledig wordt 
+			ondanks dat het type anders specificeert. De werkmap moet dus groot 
+			genoeg zijn om eventueel alle bronbestanden te kunnen bevatten.</p>
+			<p class="normal"><b>Bestemming</b> - Bestemmingsmap, lokaal en/of 
+			FTP. Er kunnen meerdere bestemmingen worden aangegeven, dezelfde 
+			archieven worden op elke bestemming geplaatst.</p>
+			<p class="normal"><font color="#FF00FF"><b><u>T</u>ijdschema tab</b></font></p>
+			<p class="normal"><b>Soort schema</b> - Geeft de back-up frequentie aan. </p>
+			<p class="normal"><b>&nbsp; Eenmalig</b> op een gegeven tijdstip</p>
+			<p class="normal"><b>&nbsp; Dagelijks</b> op een bepaalde tijd </p>
+			<p class="normal"><b>&nbsp; Wekelijks</b>&nbsp;op een bepaalde dag 
+			en tijd </p>
+			<p class="normal"><b>&nbsp; Maandelijks</b>&nbsp;op een bepaalde 
+			dag en tijd </p>
+			<p class="normal"><b>&nbsp; Ieder jaar </b>op een bepaalde dag en 
+			tijd </p>
+			<p class="normal"><b>&nbsp; Interval</b> gestuurd, iedere x minuten </p>
+			<p class="normal"><b>&nbsp; Handmatig </b>&nbsp;en eenmalig zonder 
+			planning</p>
+			<p class="normal"><b>Dagen van de week</b> - voor wekelijkse 
+			back-ups</p>
+			<p class="normal"><b>Tijdstip</b> - Nadere specificatie van datum en 
+			tijdstip waarop een back-up moet draaien alsmede het tijdsinterval 
+			waarme interval back-ups draaien.</p>
+			<p class="normal"><font color="#FF00FF"><b>A<u>r</u>chief tab</b></font></p>
+			<p class="normal"><b>Compressie</b></p>
+			<p class="normal">&nbsp;&nbsp; <b>Methode</b> - Geen, Zip of SQX</p>
+			<p class="normal"><b>&nbsp;&nbsp; Beveilig met wachtwoord</b> - Hiermee kan een 
+			archief met een wachtwoord beveiligd worden. Bij gevoelige data kan 
+			hiervoor worden gekozen in plaats van (stevige) encryptie.</p>
+			<p class="normal"><b>&nbsp;&nbsp; Split-instellingen</b> - Geeft aan of en zo ja in welke 
+			groottes de archieven moeten worden opgedeeld. Vooral nuttig als de 
+			archieven worden bewaard op bijvoorbeeld CD's.</p>
+			<p class="normal"><b>Opmerkingen</b> - Dit commentaar wordt aan het 
+			archief toegevoegd.</p>
+			<p class="normal"><b>Encryptie</b> - Geef de manier van encrypten 
+			aan ().</p>
+			<p class="normal"><b>&nbsp;&nbsp; Methode</b> - Geen, Blowfish, Rijndael 
+			of DES</p>
+			<p class="normal"><b><a href="compenc_nl.htm">Lees hier voor meer 
+			informatie over compressie en encryptie.</a></b></p>
+			<p class="normal"><font color="#FF00FF"><b><u>S</u>peciaal tab</b></font></p>
+			<p class="normal"><b>Alléén van (include)</b> - Lijst van files of 
+			directories die in de back-up worden meegenomen. Alle andere file in 
+			de bron gaan dus niet mee. Filemaskers zijn ook mogelijk, 
+			bijvoorbeeld *.txt.</p>
+			<p class="normal"><b>Sluit uit (exclude)</b> - Lijst van files en 
+			directories die in de back-up NIET worden meegenomen. Ook hier 
+			kunnen filemaskers worden gebruikt.</p>
+			<p class="normal">&nbsp;</p>
+			<p class="normal"><font color="#FF00FF"><b><u>V</u>óór en Ná tab</b></font></p>
+			<p class="normal"><b>Vóór/Ná<font color="#FF00FF"> </font>&nbsp;de back-up</b> 
+			- Specificatie van acties die vóór en/of ná de back-up moeten worden 
+			uitgevoerd. Als bijvoorbeeld files die in de back-up mee moeten en 
+			in gebruik zijn door een applicatie kan deze applicatie voor de 
+			back-up worden afgesloten en na de back-up weer opgestart.
+			Ook service processen kunnen worden gestopt of gestart.</p>
+			<p class="normal">Wellicht zijn er administratieve rechten nodig 
+			voor het stoppen/starten van toepassingen en <b>wees voorzichtig met het afsluiten van 
+			toepassingen, files kunnen worden beschadigd.</b></p>
+			<p class="normal">Door een geselecteerde actie met de rechter 
+			muisknop aan te klikken kan deze omhoog of omlaag in de lijst worden 
+			verschoven.</p>
+			<p class="normal">Bij gebruik van de actie &quot;Uitvoeren&quot; of &quot;Uitvoeren 
+			en wachten&quot; kunnen parameters als volgt worden doorgegeven:</p>
+			<p class="normal">Selecteer het actie en het programma dat moet 
+			draaien. Er verschijnt dan een dialoogvenster waarmee parameters 
+			kunnen worden opgegeven. Naast andere kunnen de volgende parameters 
+			opgegeven worden:</p>
+			<p class="normal">%SOURCE - de namen door van de files die worden 
+			gekopieerd worden doorgegeven (string tussen aanhalingstekens).</p>
+			<p class="normal">%DESTINATION - de directorynaam van de back-up 
+			wordt doorgegeven (string tussen aanhalingstekens).</p>
+			<p class="normal">%TASKNAME - de naam van de taak wordt doorgegeven.</p>
+			<p class="normal"><font color="#FF00FF"><b>Geavanceerd tab</b></font></p>
+			<p class="normal"><b>Draai deze taak als andere gebruiker -</b> Als 
+			deze taak toegang moet hebben tot gegevens waarvoor gebruiker geen 
+			rechten heeft, kan de naam van een andere gebruiker worden opgegeven 
+			die deze rechten wel heeft. In dat geval zal het programma aanmelden 
+			met deze andere gebruikersnaam en weer afmelden na afloop van de 
+			taak.</p>
+			<p class="normal"><b>Afbreken bij falen</b>: Als het aanmelden 
+			mislukt zal de taak worden afgebroken en niet opnieuw worden 
+			gestart.</p>
+			<p class="normal"><b>Gebruikersnaam</b>: De naam van het account met 
+			de juiste rechten.</p>
+			<p class="normal"><b>Domein</b>: Domein naam van de gebruiker. Geef 
+			een punt als de gebruiker lokaal is.</p>
+			<p class="normal"><b>Wachtwoord</b>: Het wachtwoord van de 
+			gebruiker.</p>
+			<p class="normal">&nbsp;</p>
+			<p class="normal-center-bold"><a href="index_nl.htm">Inhoud</a></td>
+		</tr>
+		<tr>
+			<td>
+			<p class="small-center-bold">©2000-2006 by %AUTHOR%<br>
+			All rights reserved</td>
+		</tr>
+	</table>
+</div>
+
+</body>
+
+</html>

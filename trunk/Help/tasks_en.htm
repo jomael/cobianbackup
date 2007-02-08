@@ -1,0 +1,211 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<meta http-equiv="Content-Language" content="en-us">
+<title>%PROGRAMNAME% help files - Tasks</title>
+<link rel="stylesheet" type="text/css" href="CobStyle.css">
+</head>
+
+<body>
+
+<div align="center">
+	<table border="0" width="600" id="table1">
+		<tr>
+			<td>
+			<p class="h1-center">Tasks</p>
+			<p class="normal">A task can be created or modified using the <b>
+			Task&#39;s menu</b>.<p class="normal"><font color="#FF00FF"><b>General 
+			tab</b></font><p class="normal"><b>Task name</b> - The name of the 
+			task. This will be used many times on the log file and for the 
+			compressed file names. You can leave the default ugly name or chose 
+			an unique name to every task.<p class="normal"><b>Task ID</b> - A 
+			unique identification to every task. You cannot modify this.&nbsp; 
+			ID is only used internally by the program.<p class="normal"><b>
+			Disabled</b> 
+			- (Default unchecked) If this is checked, the task will be ignored 
+			when backing up.<p class="normal"><b>Include subdirectories</b> - 
+			(Default checked) If checked, when copying folders, it will also 
+			recursively copy all the files in the subdirectories. 
+			<p class="normal"><b>Create separated backups</b> - (Default 
+			checked). If you select this check box, it will create a new file or 
+			directory every time the item is copied. The date and time will be 
+			used as a part of the new file name. Example: Item1 2002-01-11 ; 
+			12;00.zip. If unchecked, the destination files will be overwritten<b>. 
+			There is one disadvantage in overwriting the backups</b>: If the 
+			backup fails for some reason in the middle of the operation, you 
+			could end up having a bad backup , because the previous one will be 
+			replaced by a bad one.<p class="normal">
+			<b>Clear the archive attribute</b>: The program uses the archive bit 
+			of the attribute of a file to decide which files must be copied when 
+			the backup is differential or incremental. If you uncheck this 
+			option the attributes will not be cleared. This is useful if you 
+			want to have the same source in several different tasks.<p class="normal">
+			<b>Use file attribute logic</b>: Sometimes, you cannot use the 
+			archive attributes methods (for example, if the source is in a Linux 
+			partition). In this case, you may want to uncheck this option. The 
+			program will then compare the time stamps of the source and the 
+			destination when making incremental or differential backups. This is 
+			a very <b>LIMITED</b> solution: it won&#39;t work with archives or FTP 
+			files.<p class="normal">
+			%PROGRAMNAME% supports 4 types of tasks:<p class="normal"><b>Full 
+			backups</b>: Every single file in the source will be copied or 
+			compressed. If you are overwriting, every file will be replaced. If 
+			Overwrite is unchecked, you will have several copies of the same 
+			source.<p class="normal"><b>
+			Incremental</b> -&nbsp; The program will check if the source has 
+			been changed<font color="#FF0000"><b> from the last backup</b></font>. 
+			If there is no need to copy the file, it will be skipped, saving 
+			backup time. The incremental procedure checks the Archive bit 
+			attribute of the file. You may want to manually reset the attribute 
+			to force a full backup: use the &quot;Set the archive attributes&quot; on the 
+			Task menu.<p class="normal">
+			<b>Differential</b>: The program will check if the source has been 
+			changed <b><font color="#FF0000">from the last FULL backup</font></b>. 
+			If there is no need to copy the file, it will be skipped, saving 
+			backup time. The differential procedure checks the Archive bit 
+			attribute of the file. You may want to manually reset the attribute 
+			to force a full backup: use the &quot;Set the archive attributes&quot; on the 
+			Task menu.<p class="normal">
+			<b>Dummy task</b>: This backup doesn&#39;t need a source or a 
+			destination. It is useful to use the task just as an scheduler to 
+			execute applications, close services, reboot the computer, etc.<p class="normal">
+			<b>Full copies to keep</b>: If your backup is set to NOT overwrite 
+			existing backups, every new backup will create a new file or 
+			directory with the same name, but with the date and time of the 
+			backup as a complement. 
+			<p class="normal">For example: If the original file is SimCity.exe, 
+			and the backup is NOT set to overwrite, every new backup will 
+			create: </p>
+			<p class="normal">SimCity.exe <br>
+			SimCity 2003-04-13 12;22.exe <br>
+			SimCity 2003-04-14 12;22.exe <br>
+			SimCity 2003-04-15 12;22.exe , etc </p>
+			<p class="normal">Now it&#39;s easy to maintain a limited number of FULL 
+			copies of every backup and delete the old ones. On the backup 
+			options you can set that you want, for example, maintain only 2 full 
+			copies of the backup. <b>Note that if your task is incremental or 
+			differential, the backup program will keep or delete the whole set 
+			of 1 full backup plus its associated child backups every time it 
+			deletes something</b>.</p>
+			<p class="normal">The older backups will be deleted then. You can 
+			always PARK a backup to prevent it from being deleted. This is 
+			specially important for incremental backups when the first backup 
+			will usually be full and the next backup only partial.</p>
+			<p class="normal"><b>Make a full backup every</b>:&nbsp; If you have 
+			scheduled a differential or incremental backup then you can program 
+			it so, that every X backups will be made full. For example, if you 
+			enter the number 3 here, then the 3rd, 6th, 9th, 12th, etc backups 
+			will be full. <font color="#FF0000"><b>This feature only works if 
+			you are not overwriting your backups</b></font>.</p>
+			<p class="normal"><font color="#FF00FF"><b>Files tab</b></font></p>
+			<p class="normal"><b>Source</b> - Enter the files, directories 
+			or/and FTP sources to backup. Please note that a backup FROM a FTP 
+			must be full. Other backup types will be ignored and the backup will 
+			made full. You must have enough space in the temporary directory to 
+			download the whole FTP source if necessary.</p>
+			<p class="normal"><b>Destination</b> - Enter the destination 
+			directory, local or/and FTP . You can have multiple directories as 
+			destinations. A copy of the backup will be placed on every 
+			destination directory.</p>
+			<p class="normal"><font color="#FF00FF"><b>Schedule tab</b></font></p>
+			<p class="normal"><b>Backup type</b>: Select how often your backup 
+			will be executed. </p>
+			<p class="normal"><b>Once</b>: basically, this copies the file or 
+			folder at the given date and time. </p>
+			<p class="normal"><b>Daily</b>: backups the item every day at the 
+			given time. </p>
+			<p class="normal"><b>Weekly</b>: backups the item once a week at the 
+			given day of the week. </p>
+			<p class="normal"><b>Monthly</b>: backups the item once a month, at 
+			the given day and time. </p>
+			<p class="normal"><b>Yearly</b>: backups the task once a year, at 
+			the given day and time.</p>
+			<p class="normal"><b>Timer</b>: repeatedly backups the item every X 
+			minutes. </p>
+			<p class="normal"><b>Manual</b>: executes only if the user click on 
+			Backup now. Not scheduled.</p>
+			<p class="normal"><font color="#FF00FF"><b>Archive tab</b></font></p>
+			<p class="normal"><b>Compression</b>: Choose the method of 
+			compression to use (none, Zip or SQX)</p>
+			<p class="normal"><font color="#FF0000"><b>WARNING</b></font> - If 
+			you are overwriting existing backups AND using compression, you will 
+			obtain some king of mirror: if a file was deleted from the source, 
+			it will be ALSO be deleted from the compressed backup. This will not 
+			happen if the backup is uncompressed or if you are not overwriting.</p>
+			<p class="normal"><b>Split the zip files in blocks</b>: If checked, 
+			the final compressed archive will be split into blocks. Useful if 
+			you want to backup the parts into removable media.</p>
+			<p class="normal"><b>Archive&nbsp; comment</b>: Commentary to be 
+			include into the archive</p>
+			<p class="normal"><b>Encryption type</b>: Choose the method to use 
+			with encryption. </p>
+			<p class="normal"><b><a href="compenc_en.htm">For more information 
+			about compression and encryption click here</a>.</b></p>
+			<p class="normal"><font color="#FF00FF"><b>Special tab</b></font></p>
+			<p class="normal">Here you can add a list of files/directories that 
+			you can exclude or include into the backup. You can also use masks: 
+			Example *.txt. </p>
+			<p class="normal">Here you can exclude/include:</p>
+			<p class="normal">1) Files. Just select the file with the &quot;Add file&quot; 
+			button</p>
+			<p class="normal">2) Directories: Just select a directory using the 
+			&quot;Add directory&quot; button</p>
+			<p class="normal">3) Enter a mask. You can use simply masks like 
+			*.txt to exclude or include all the text files or you can use a 
+			complex mask like </p>
+			<p class="normal">*\Directory\*\*.txt</p>
+			<p class="normal">This will include/exclude all the text files in 
+			any path&nbsp; that contains a folder called Directory.</p>
+			<p class="normal"><font color="#FF00FF"><b>Events tab</b></font></p>
+			<p class="normal"><b>Before/After backup</b>: You can specify some 
+			events that will occur before the backup starts and some events 
+			after the backup ends. This can be convenient if you want to backup 
+			some file that is in use by some application.<b> Before backup</b>, 
+			close the other program and <b>after backup</b>, start it again. You 
+			can <b>stop/start services </b>as well. </p>
+			<p class="normal">You can close a program using the window's 
+			caption (or a portion of it). In this version, you can also enter a window&#39;s 
+			class name. This class name cannot be easily known but if you are a 
+			programmer or an advanced user, you can use tools like Spy++ to get 
+			the class name of some window. In this case you need to enter the 
+			class name in the form:</p>
+			<p class="normal">class:the_class_name</p>
+			<p class="normal">including the word &quot;class:&quot; with the colon.</p>
+			<p class="normal">If you are using the events &quot;Execute&quot; or &quot;Execute 
+			and wait&quot; you can pass as parameters the source or the destination. 
+			To do so:</p>
+			<p class="normal">* Select the event and select the executable to 
+			run.<br>
+			* A dialog will be shown when you can enter some parameters. Here 
+			you can enter any parameter you want, like a filename, etc. </p>
+			<p class="normal">The files/directories will be passed using a 
+			quoted string to avoid problems with long file names.</p>
+			<p class="normal">You may need administrators rights to close some 
+			programs or to start/stop services. </p>
+			<p class="normal"><font color="#FF00FF"><b>Advanced tab</b></font></p>
+			<p class="normal"><b>Run the task as another user:</b> If your task 
+			needs to access some resources for which you don&#39;t have permissions,&nbsp; 
+			just select this option and enter the user name and password to use. 
+			When the backup begins, the program will the try to logon as the 
+			given user and logout when the task ends.</p>
+			<p class="normal"><b>Abort if failed</b>: If the logon failed, just 
+			abort the task and don&#39;t try to continue.</p>
+			<p class="normal"><b>ID</b>: name of the account</p>
+			<p class="normal"><b>Domain</b>: Domain name to which the user name 
+			belongs. Enter a dot if the accounts belong to the local machine 
+			only.</p>
+			<p class="normal"><b>Password</b>: The password used to logon.</p>
+			<p class="normal-center-bold"><a href="index_en.htm">Index</a></td>
+		</tr>
+		<tr>
+			<td>
+			<p class="small-center-bold">©2000-2006 by %AUTHOR%<br>
+			All rights reserved</td>
+		</tr>
+	</table>
+</div>
+
+</body>
+
+</html>

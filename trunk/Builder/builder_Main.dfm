@@ -1,0 +1,59 @@
+object form_Main: Tform_Main
+  Left = 0
+  Top = 0
+  BorderStyle = bsDialog
+  ClientHeight = 362
+  ClientWidth = 594
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -13
+  Font.Name = 'Verdana'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poScreenCenter
+  Scaled = False
+  ShowHint = True
+  OnCloseQuery = FormCloseQuery
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  PixelsPerInch = 120
+  TextHeight = 16
+  object re_Log: TTntRichEdit
+    Left = 0
+    Top = 0
+    Width = 594
+    Height = 321
+    Align = alTop
+    ReadOnly = True
+    ScrollBars = ssBoth
+    TabOrder = 0
+  end
+  object b_Proceed: TTntButton
+    Left = 247
+    Top = 329
+    Width = 100
+    Height = 25
+    Caption = '&Build'
+    Default = True
+    TabOrder = 1
+    OnClick = b_ProceedClick
+  end
+  object Zip: TZipForge
+    ExtractCorruptedFiles = False
+    CompressionLevel = clFastest
+    CompressionMode = 1
+    CurrentVersion = '2.70 '
+    SpanningMode = smNone
+    SpanningOptions.AdvancedNaming = True
+    SpanningOptions.VolumeSize = vsAutoDetect
+    Options.FlushBuffers = True
+    Options.OEMFileNames = True
+    InMemory = False
+    OnFileProgress = ZipFileProgress
+    OnProcessFileFailure = ZipProcessFileFailure
+    Zip64Mode = zmDisabled
+    Left = 512
+    Top = 256
+  end
+end

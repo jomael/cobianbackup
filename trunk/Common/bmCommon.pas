@@ -3300,16 +3300,19 @@ var
   end;
   //****************************************************************************
 begin
-  // 2007-02-03 Fixed! If ADir = '' DO NOT DELETE BECAUSE THERE IS NOTHING TO
+  // 2007-02-03 Fixed! If Dir = '' DO NOT DELETE BECAUSE THERE IS NOTHING TO
   // DELETE (The download failed, because a directory must ALWAYS be created).
   // Ifproceed, in certain circunstances, a service would trash the System32
   // directory
   Result:= false;
 
-  if (ADir = WS_NIL) then
+  // 2007-02-15 by Luis Cobian... Fixed a bug that didn't delete a directory
+  // because I introduced the bug  "if (ADir = WS_NIL) then"   in the last version
+  if (Dir = WS_NIL) then
     Exit;
     
   ADir:= NormalizeFileName(CobSetBackSlashW(Dir));
+  
   if WideFindFirst(ADir + WS_ALLFILES, FaAnyfile, DirInfo) = 0 then
   begin
     Proceed();

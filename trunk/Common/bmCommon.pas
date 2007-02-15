@@ -3304,6 +3304,8 @@ begin
   // DELETE (The download failed, because a directory must ALWAYS be created).
   // Ifproceed, in certain circunstances, a service would trash the System32
   // directory
+  Result:= false;
+
   if (ADir = WS_NIL) then
     Exit;
     

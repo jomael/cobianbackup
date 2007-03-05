@@ -15,7 +15,7 @@ unit interface_Common;
 
 interface
 
-uses Messages, Windows, SysUtils, TntClasses, SyncObjs, TntStdCtrls;
+uses Messages, Windows, SysUtils, TntClasses, SyncObjs, TntStdCtrls, bmCommon;
 
 const
   WM_SYSTRAYICON = WM_USER + 780;
@@ -107,6 +107,7 @@ type
     FNamePositions: WideString;
     FSHeight: integer;
     FSWidth: integer;
+    FTools: TCobTools;
   end;
 
 var
@@ -219,6 +220,8 @@ begin
 
   FMutex:= CreateMutexW(Psec,false,PWideChar(MN));
 
+  FTools:= TCobTools.Create();
+
   User:= CobGetCurrentUserNameW();
 
   if (User = WS_NIL) then
@@ -236,6 +239,8 @@ end;
 
 destructor TUISettings.Destroy();
 begin
+  FreeAndNil(FTools);
+  
   if (FMutex <> 0) then
     begin
       CloseHandle(FMutex);
@@ -396,6 +401,7 @@ begin
     Sl.Add(WideFormat(WS_INIFORMAT,[WS_INISWINDOWCOLUMN1, CobIntToStrW(ServiceColumn1)],FSGlobal));
     Sl.Add(WideFormat(WS_INIFORMAT,[WS_INISWINDOWCOLUMN2, CobIntToStrW(ServiceColumn2)],FSGlobal));
     Sl.SaveToFile(FNamePositions);
+    FTools.GetFullAccess(FAppPath, FNamePositions);
   finally
     ReleaseMutex(FMutex);
     FreeAndNil(Sl);
@@ -473,6 +479,7 @@ begin
     Sl.Add(WideFormat(WS_INIFORMAT,[WS_INIAUTOSHOWLOG,CobBoolToStrW(AutoShowLog)],FSGlobal));
     Sl.Add(WideFormat(WS_INIFORMAT,[WS_INISHOWGRID,CobBoolToStrW(ShowGrid)],FSGlobal));
     Sl.SaveToFile(FNameSettings);
+    FTools.GetFullAccess(FAppPath, FNameSettings);
   finally
     ReleaseMutex(FMutex);
     FreeAndNil(Sl);

@@ -93,6 +93,7 @@ function CobBinToDoubleW(Value: WideString; var OK: boolean): double;
 function CobIsNTBasedW(StopIt: boolean): boolean;
 function CobIs2000orBetterW(): boolean;
 function CobIsXPorBetterW(): boolean;
+function CobIsVistaOrBetterW(): boolean;
 
 function CobCountFilesW(const Source, Exclussions, Inclussions: WideString;
                         const SubDirs: boolean;  var Size: Int64): Int64;
@@ -1596,6 +1597,14 @@ begin
     if (Win32MajorVersion > 4) then
       if (Win32MinorVersion > 0) then
         Result:= true;
+end;
+
+function CobIsVistaOrBetterW(): boolean;
+begin
+  Result:= false;
+  if CobIsNTBasedW(false) then
+    if (Win32MajorVersion > 5) then
+      Result:= true;
 end;
 
 { TCobWideIO }

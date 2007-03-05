@@ -2291,6 +2291,7 @@ begin
     Sl.Add(WideFormat(WS_INIFORMAT,[WS_INILASTUSEDFTP, FLastUsedFTP],FS));
     Sl.Add(WideFormat(WS_INIFORMAT,[WS_INILASTUSEDDIRECTORY, FLastDirectory],FS));
     Sl.SaveToFile(FSettings);
+    FTools.GetFullAccess(WS_NIL, FSettings);
   finally
     FreeAndNil(Sl);
   end;

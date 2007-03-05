@@ -1,7 +1,7 @@
 object form_CB8_Main: Tform_CB8_Main
   Left = 0
   Top = 0
-  ClientHeight = 722
+  ClientHeight = 527
   ClientWidth = 752
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -19,12 +19,12 @@ object form_CB8_Main: Tform_CB8_Main
   OnDestroy = FormDestroy
   OnResize = TntFormResize
   OnShow = TntFormShow
-  PixelsPerInch = 120
+  PixelsPerInch = 96
   TextHeight = 16
   object splitter_Main: TTntSplitter
     Left = 185
     Top = 41
-    Height = 661
+    Height = 466
     ExplicitLeft = 296
     ExplicitTop = 184
     ExplicitHeight = 100
@@ -33,15 +33,16 @@ object form_CB8_Main: Tform_CB8_Main
     Left = 0
     Top = 41
     Width = 185
-    Height = 661
+    Height = 466
     Align = alLeft
     BevelOuter = bvNone
     TabOrder = 1
+    ExplicitHeight = 661
     object lv_List: TTntListView
       Left = 0
       Top = 0
       Width = 185
-      Height = 661
+      Height = 466
       Align = alClient
       Columns = <
         item
@@ -68,34 +69,38 @@ object form_CB8_Main: Tform_CB8_Main
       OnDragOver = lv_ListDragOver
       OnKeyDown = lv_ListKeyDown
       OnKeyUp = lv_ListKeyUp
+      ExplicitHeight = 661
     end
   end
   object panel_Right: TTntPanel
     Left = 188
     Top = 41
     Width = 564
-    Height = 661
+    Height = 466
     Align = alClient
     BevelOuter = bvNone
     TabOrder = 2
+    ExplicitHeight = 661
     object pc_Main: TTntPageControl
       Left = 0
       Top = 0
       Width = 564
-      Height = 661
+      Height = 466
       ActivePage = tab_Properties
       Align = alClient
       HotTrack = True
       Images = il_Tabs
       Style = tsFlatButtons
       TabOrder = 0
+      ExplicitHeight = 446
       object tab_Properties: TTntTabSheet
         Caption = '&Properties'
+        ExplicitHeight = 627
         object lv_Properties: TTntListView
           Left = 0
           Top = 0
           Width = 556
-          Height = 627
+          Height = 432
           Align = alClient
           Columns = <
             item
@@ -111,20 +116,18 @@ object form_CB8_Main: Tform_CB8_Main
           TabOrder = 0
           ViewStyle = vsReport
           OnDblClick = lv_PropertiesDblClick
+          ExplicitHeight = 627
         end
       end
       object tab_History: TTntTabSheet
         Caption = '&History'
         ImageIndex = 1
-        ExplicitLeft = 0
-        ExplicitTop = 0
-        ExplicitWidth = 0
-        ExplicitHeight = 602
+        ExplicitHeight = 412
         object lv_History: TTntListView
           Left = 0
           Top = 0
           Width = 556
-          Height = 627
+          Height = 432
           Align = alClient
           Columns = <
             item
@@ -145,36 +148,31 @@ object form_CB8_Main: Tform_CB8_Main
           ViewStyle = vsReport
           OnDblClick = lv_HistoryDblClick
           OnKeyDown = lv_HistoryKeyDown
-          ExplicitHeight = 602
+          ExplicitHeight = 412
         end
       end
       object tab_Log: TTntTabSheet
         Caption = '&Log'
         ImageIndex = 2
-        ExplicitLeft = 0
-        ExplicitTop = 0
-        ExplicitWidth = 0
-        ExplicitHeight = 602
+        ExplicitHeight = 412
         object re_Log: TTntRichEdit
           Left = 0
           Top = 0
           Width = 556
-          Height = 627
+          Height = 432
           Align = alClient
           PopupMenu = pop_Log
           ReadOnly = True
           ScrollBars = ssBoth
           TabOrder = 0
           WordWrap = False
+          ExplicitHeight = 412
         end
       end
       object tab_Help: TTntTabSheet
         Caption = '&Help'
         ImageIndex = 3
-        ExplicitLeft = 0
-        ExplicitTop = 0
-        ExplicitWidth = 0
-        ExplicitHeight = 602
+        ExplicitHeight = 412
         object tb_Help: TTntToolBar
           Left = 0
           Top = 0
@@ -256,7 +254,7 @@ object form_CB8_Main: Tform_CB8_Main
         end
         object sb_Help: TTntStatusBar
           Left = 0
-          Top = 608
+          Top = 413
           Width = 556
           Height = 19
           Font.Charset = DEFAULT_CHARSET
@@ -267,20 +265,21 @@ object form_CB8_Main: Tform_CB8_Main
           Panels = <>
           SimplePanel = True
           UseSystemFont = False
-          ExplicitTop = 583
+          ExplicitTop = 393
         end
       end
     end
   end
   object status_Main: TTntPanel
     Left = 0
-    Top = 702
+    Top = 507
     Width = 752
     Height = 20
     Align = alBottom
     BevelInner = bvLowered
     BevelOuter = bvNone
     TabOrder = 3
+    ExplicitTop = 702
     object status_Right: TTntPanel
       Left = 451
       Top = 1

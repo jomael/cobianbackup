@@ -18,7 +18,7 @@ object form_Task: Tform_Task
   OnCreate = TntFormCreate
   OnDestroy = TntFormDestroy
   OnShow = TntFormShow
-  PixelsPerInch = 120
+  PixelsPerInch = 96
   TextHeight = 16
   object p_Bottom: TTntPanel
     Left = 0
@@ -81,7 +81,7 @@ object form_Task: Tform_Task
       Top = 1
       Width = 442
       Height = 419
-      ActivePage = tab_Events
+      ActivePage = tab_General
       Align = alClient
       Style = tsFlatButtons
       TabOrder = 0

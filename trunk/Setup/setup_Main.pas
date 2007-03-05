@@ -18,7 +18,7 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, TntForms, ComCtrls, TntComCtrls, ExtCtrls, TntExtCtrls, StdCtrls,
-  TntStdCtrls, bmTranslator, jpeg;
+  TntStdCtrls, bmTranslator, jpeg, bmCommon;
 
 const
   INT_POSTMAINSHOW = WM_USER + 5491;
@@ -97,6 +97,7 @@ type
     FErrors: integer;
     FOldInstalled: boolean;
     FFilesCopied: integer;
+    FTools: TCobTools;
     function GetSerial(): boolean;
     procedure ExtractResources();
     procedure CheckUI();
@@ -126,7 +127,6 @@ type
     procedure ShowResults();
     procedure SetLanguage();
     procedure CopySpecialLibrary(const Source, DestDir: WideString);
-    procedure GetFullAccess(const Obj: WideString);
   public
     { Public declarations }
   protected
@@ -144,7 +144,7 @@ implementation
 
 uses CobCommonW, bmCustomize, setup_Serial, bmConstants, setup_Constants,
   setup_Extractor, CobRegistryW, TntSysUtils, CobDialogsW, TntClasses,
-  CobEncrypt, setup_Languages, bmCommon, ShellApi, ShlObj, ActiveX, ComObj;
+  CobEncrypt, setup_Languages, ShellApi, ShlObj, ActiveX, ComObj;
 
 procedure Tform_Main.AddAppKey(const Global: boolean);
 begin
@@ -632,21 +632,6 @@ begin
         Result:= INT_INSTALLAPPSERVICE;
 end;
 
-procedure Tform_Main.GetFullAccess(const Obj: WideString);
-var
-  h: THandle;
-  Ext: function (const ObjectName: PWideChar): cardinal; stdcall;
-begin
-  h:= LoadLibraryW(PWideChar(CobSetBackSlashW(FZippedFiles) + WS_COBNTSEC));
-    if (h> 0) then
-    begin
-      @Ext:= GetProcAddress(h, PAnsiChar(S_LIBGRANTACCESS));
-      if (@Ext <> nil) then
-        Ext(PWideChar(Obj));
-      FreeLibrary(h);
-    end;
-end;
-
 procedure Tform_Main.GetInterfaceText;
 begin
   b_Next.Caption:= Translator.GetInterfaceText('693');
@@ -991,6 +976,8 @@ begin
 
   FSec:= CobGetNullDaclAttributesW(pSec);
 
+  FTools:= TCobTools.Create();
+
   FLanguagePath:= CobSetBackSlashW(FZippedFiles + WS_DIRLANG);
 
   Translator:= TTranslator.Create(@FSec, FAppPath, FLanguagePath);
@@ -1092,7 +1079,7 @@ end;
 
 procedure Tform_Main.SetLanguage();
 var
-  DBPath, SPath: WideString;
+  DBPath, SPath, IniFile: WideString;
 begin
   // if this is the first time the user installs the
   // program, just create a std ini file with the selected language
@@ -1104,7 +1091,7 @@ begin
   if (not WideDirectoryExists(DBPath)) then
   begin
     WideCreateDir(DBPath);
-    GetFullAccess(DBPath);
+    FTools.GetFullAccess(FZippedFiles, DBPath);
   end;
 
   SPath:= CobSetBackSlashW(e_Directory.Text + WS_DIRSETTINGS);
@@ -1112,7 +1099,7 @@ begin
   if (not WideDirectoryExists(SPath)) then
   begin
     WideCreateDir(SPath);
-    GetFullAccess(SPath);
+    FTools.GetFullAccess(FZippedFiles, SPath);
   end;
 
   {LPath:= CobSetBackSlashW(e_Directory.Text + WS_DIRLANG);
@@ -1128,7 +1115,9 @@ begin
     Settings:= TSettings.Create(@FSec, e_Directory.Text, DBPath, SPath);
     try
       Settings.SetLanguage(FStLanguage);
-      Settings.SaveSettings(false);
+      Settings.SaveSettings(false, true);
+      IniFile:= CobSetBackSlashW(SPath) +  WideChangeFileExt(WS_ENGINEEXENAME,WS_INIEXT);
+      FTools.GetFullAccess(FZippedFiles, IniFile);
     finally
       FreeAndNil(Settings);
     end;
@@ -1185,6 +1174,7 @@ end;
 procedure Tform_Main.TntFormDestroy(Sender: TObject);
 begin
   FreeAndNil(Translator);
+  FreeAndNil(FTools);
   CobFreeNullDaclAttributesW(pSec);
 end;
 

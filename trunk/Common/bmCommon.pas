@@ -54,6 +54,62 @@ type
   end;
   PFindWindowStructW = ^TFindWindowStructW;
 
+  TCobTools = class (TObject)
+  public
+    OnCRCProgress: TCobCRCCallbackW;
+    OnAbort: TCobAbort;
+    OnFileProcess: TCobUIDelete;
+    constructor Create();
+    destructor Destroy(); override;
+    function ValidateFileName(const FileName: WideString): boolean;
+    function EncodeSD(const Kind: integer; const Path: WideString): WideString;
+    function DecodeSD(const Encoded: WideString; var Kind: integer): WideString;
+    function ReplaceTemplate(const Input, TaskName{
+                    , CleanSource, CleanDestination}: WideString): WideString;
+    function GetCompNameW(): WideString;
+    function NormalizeFileName(const FileName:WideString): WideString;
+    function GetGoodFileNameW(const Input: WideString): WideString;
+    function ExecuteW(const FileName, Param: WideString): cardinal;
+    function ExecuteAndWaitW(const FileName, Param: WideString;
+                            Hide: boolean=false): cardinal;
+    function CloseAWindowW(const ACaption: WideString; const Kill: boolean): cardinal;
+    function StartServiceW(const LibraryName, ServiceName, Param: WideString): cardinal;
+    function StopService(const LibraryName, ServiceName: WideString): cardinal;
+    function RestartShutdownW(const Restart,Kill: boolean): cardinal;
+    function DeleteDirectoryW(const Dir: WideString): boolean;
+    function GetArchiveAttributeW(const FileName: WideString): boolean;
+    function GetReadOnlyAttributeW(const FileName: WideString): boolean;
+    function NeedToCopyByTimeStamp(const FileName, FileNameDest: WideString): boolean;
+    function SetArchiveAttributeW(const FileName: WideString; const SetIt: boolean): boolean;
+    function SetReadOnlyAttributeW(const FileName: WideString; const SetIt: boolean): boolean;
+    function GetFileNameSeparatedW(const FileName, AFormat: WideString;
+                      const Separate: boolean; const DT: TDateTime): WideString;
+    function DeleteFileWSpecial(const FileName: WideString): boolean;
+    function GetDirNameSeparatedW(const Dir, AFormat: WideString;
+                      const Separate: boolean; const DT: TDateTime): WideString;
+    function DeleteSpacesW(const FileName: WideString): WideString;
+    function IsFileLocked(const FileName: WideString): boolean;
+    function IsTheSameFile(const File1, File2: WideString;
+                        const UseSizes: boolean): boolean;
+    function CopyTimeStamps(const Source, Destination: WideString): boolean;
+    function CopyAttributes(const Source, Destination: WideString): boolean;
+    function CopyAttributesDir(const Source, Destination: WideString): boolean;
+    function IsDirEmpty(const Directory: WideString): boolean;
+    function IsInTheMask(const AName, AMask: WideString; const Propagate: boolean): boolean;
+    function GetParentDirectory(const Dir: WideString): WideString;
+    function GetCleanSD(const SD: WideString): WideString;
+    function IsRoot(const Dir: WideString): boolean;
+    procedure GetFullAccess(const DLLPath, FileName: WideString);
+  private
+    Sl: TTntStringList;
+    FS: TFormatSettings;
+    function DoAbort(): boolean;
+    procedure FileToProcess(const FileName: WideString);
+    function FindAWindow(TheCaption: WideString; TheClassName: WideString): THandle;
+    function GetDateTimeFormat(const AFormat: WideString; const DT: TDateTime): WideString;
+    function KillSpaces(const Input: WideString): WideString;
+  end;
+
   //Use this class only from the main thread
   // and pass the values as parameters
   TGlobalUtils = class(TObject)
@@ -181,6 +237,7 @@ type
 
   PTask=^TTask;
 
+
   TSettings = class(TObject)
   public
     TaskList: TThreadList;
@@ -188,7 +245,7 @@ type
                        const AppPath, DBPath, SettingsPath: WideString);
     destructor Destroy();override;
     procedure LoadSettings();
-    procedure SaveSettings(const Std: boolean);
+    procedure SaveSettings(const Std: boolean; const FromSetup: boolean = false);
     procedure LoadList();
     procedure SaveList();
     function CheckTemporaryDir(const DBDir: WideString): boolean;
@@ -439,9 +496,9 @@ type
     FRunOldBackups: boolean;
     FRunDontAsk: boolean;
     FPropagateMasks: boolean;
+    FTools: TCobTools;
     procedure ClearList();
     function GetDefaultListName(): WideString;
-    procedure GetFullAccess(const FileName: WideString);
   end;
 
   TFTPAddress = class(TObject)
@@ -500,61 +557,6 @@ type
     function EncodeAddressDisplay(): WideString;
     function DecodeAddress(const Encoded: WideString): boolean;
     procedure SetDefaultValues();
-  end;
-
-  TCobTools = class (TObject)
-  public
-    OnCRCProgress: TCobCRCCallbackW;
-    OnAbort: TCobAbort;
-    OnFileProcess: TCobUIDelete;
-    constructor Create();
-    destructor Destroy(); override;
-    function ValidateFileName(const FileName: WideString): boolean;
-    function EncodeSD(const Kind: integer; const Path: WideString): WideString;
-    function DecodeSD(const Encoded: WideString; var Kind: integer): WideString;
-    function ReplaceTemplate(const Input, TaskName{
-                    , CleanSource, CleanDestination}: WideString): WideString;
-    function GetCompNameW(): WideString;
-    function NormalizeFileName(const FileName:WideString): WideString;
-    function GetGoodFileNameW(const Input: WideString): WideString;
-    function ExecuteW(const FileName, Param: WideString): cardinal;
-    function ExecuteAndWaitW(const FileName, Param: WideString;
-                            Hide: boolean=false): cardinal;
-    function CloseAWindowW(const ACaption: WideString; const Kill: boolean): cardinal;
-    function StartServiceW(const LibraryName, ServiceName, Param: WideString): cardinal;
-    function StopService(const LibraryName, ServiceName: WideString): cardinal;
-    function RestartShutdownW(const Restart,Kill: boolean): cardinal;
-    function DeleteDirectoryW(const Dir: WideString): boolean;
-    function GetArchiveAttributeW(const FileName: WideString): boolean;
-    function GetReadOnlyAttributeW(const FileName: WideString): boolean;
-    function NeedToCopyByTimeStamp(const FileName, FileNameDest: WideString): boolean;
-    function SetArchiveAttributeW(const FileName: WideString; const SetIt: boolean): boolean;
-    function SetReadOnlyAttributeW(const FileName: WideString; const SetIt: boolean): boolean;
-    function GetFileNameSeparatedW(const FileName, AFormat: WideString;
-                      const Separate: boolean; const DT: TDateTime): WideString;
-    function DeleteFileWSpecial(const FileName: WideString): boolean;
-    function GetDirNameSeparatedW(const Dir, AFormat: WideString;
-                      const Separate: boolean; const DT: TDateTime): WideString;
-    function DeleteSpacesW(const FileName: WideString): WideString;
-    function IsFileLocked(const FileName: WideString): boolean;
-    function IsTheSameFile(const File1, File2: WideString;
-                        const UseSizes: boolean): boolean;
-    function CopyTimeStamps(const Source, Destination: WideString): boolean;
-    function CopyAttributes(const Source, Destination: WideString): boolean;
-    function CopyAttributesDir(const Source, Destination: WideString): boolean;
-    function IsDirEmpty(const Directory: WideString): boolean;
-    function IsInTheMask(const AName, AMask: WideString; const Propagate: boolean): boolean;
-    function GetParentDirectory(const Dir: WideString): WideString;
-    function GetCleanSD(const SD: WideString): WideString;
-    function IsRoot(const Dir: WideString): boolean;
-  private
-    Sl: TTntStringList;
-    FS: TFormatSettings;
-    function DoAbort(): boolean;
-    procedure FileToProcess(const FileName: WideString);
-    function FindAWindow(TheCaption: WideString; TheClassName: WideString): THandle;
-    function GetDateTimeFormat(const AFormat: WideString; const DT: TDateTime): WideString;
-    function KillSpaces(const Input: WideString): WideString;
   end;
 
 var
@@ -726,7 +728,7 @@ begin
     if (not WideFileExists(fn)) then
     begin
       CobCreateEmptyTextFileW(fn);  //<--- this function has an except handler
-      GetFullAccess(fn);
+      FTools.GetFullAccess(WS_NIL, fn);
     end;
   finally
     ReleaseMutex(FMutexList);
@@ -917,6 +919,8 @@ begin
   TaskList:= TThreadList.Create();
   TaskList.Duplicates:= dupAccept;
 
+  FTools:= TCobTools.Create();
+
   if (not WideFileExists(FIniFileName)) then
     SaveSettings(true);
 end;
@@ -969,6 +973,8 @@ end;
 
 destructor TSettings.Destroy();
 begin
+  FreeAndNil(FTools);
+
   ClearList();
 
   FreeAndNil(TaskList);
@@ -1090,7 +1096,7 @@ begin
           Sl.LoadFromFile(fn) else
           begin
             CobCreateEmptyTextFileW(fn); // Create it at once
-            GetFullAccess(fn);
+            FTools.GetFullAccess(WS_NIL, fn);
           end;
         Result:= Sl.CommaText;
       except       // <- Important because thís will be used in the engine too
@@ -1101,21 +1107,6 @@ begin
       ReleaseMutex(FMutexList);
     end;
   end;
-end;
-
-procedure TSettings.GetFullAccess(const FileName: WideString);
-var
-  h: THandle;
-  Ext: function (const ObjectName: PWideChar): cardinal; stdcall;
-begin
-  h:= LoadLibraryW(PWideChar(FAppPath + WS_COBNTSEC));
-    if (h> 0) then
-    begin
-      @Ext:= GetProcAddress(h, PAnsiChar(S_LIBGRANTACCESS));
-      if (@Ext <> nil) then
-        Ext(PWideChar(FileName));
-      FreeLibrary(h);
-    end;
 end;
 
 function TSettings.GetAlwaysCreateFolder: boolean;
@@ -1844,7 +1835,7 @@ begin
         Sl.LoadFromFile(FCurrentList) else
         begin
           CobCreateEmptyTextFileW(FCurrentList);
-          GetFullAccess(FCurrentList);
+          FTools.GetFullAccess(WS_NIL, FCurrentList);
         end;
       for i:= 0 to Sl.Count - 1 do
       begin
@@ -1999,7 +1990,7 @@ begin
           Sl[j]:= Backup.BackupToStrW();
         end;
         Sl.SaveToFile(FDBPath + Task.ID + WS_HISTORYEXT);
-        GetFullAccess(FDBPath + Task.ID + WS_HISTORYEXT);
+        FTools.GetFullAccess(WS_NIL, FDBPath + Task.ID + WS_HISTORYEXT);
       end;
     end;
   finally
@@ -2031,7 +2022,7 @@ begin
             end;
         end;
       Sl.SaveToFile(FCurrentList);
-      GetFullAccess(FCurrentList);
+      FTools.GetFullAccess(WS_NIL, FCurrentList);
     finally
       TaskList.UnlockList();
       ReleaseMutex(FMutexList);
@@ -2041,7 +2032,7 @@ begin
   end;
 end;
 
-procedure TSettings.SaveSettings(const Std: boolean);
+procedure TSettings.SaveSettings(const Std: boolean; const FromSetup: boolean = false);
 var
   Sl: TTntStringList;
   SOut: WideString;
@@ -2207,7 +2198,11 @@ begin
     Sl.Add(WideFormat(WS_INIFORMAT,[WS_INIRUNOLDDONTASK, CobBoolToStrW(GetRunOldDontAsk())],FS));
     Sl.Add(WideFormat(WS_INIFORMAT,[WS_INIPROPAGATEMASKS,CobBoolToStrW(GetPropagateMasks())],FS));
     Sl.SaveToFile(FIniFileName);
-    GetFullAccess(FIniFileName);
+    //2007-03-05 by Luis Cobian
+    // If this procedure is called from the Setup then the security DLL is not
+    // on the setup's directory.
+    if not FromSetup then
+      FTools.GetFullAccess(WS_NIL, FIniFileName);
   finally
     FreeAndNil(Sl);
     ReleaseMutex(FMutexIni);
@@ -3066,7 +3061,7 @@ begin
       try
         Sl.CommaText:= History;
         Sl.SaveToFile(fn);
-        GetFullAccess(fn);
+        FTools.GetFullAccess(WS_NIL, fn);
       except    // <- Important because thís will be used in the engine too
         Result:= false;
       end;
@@ -3550,6 +3545,29 @@ begin
     Sep:= WS_SPACE else
     Sep:= WS_UNDER;
   Result:= WideChangeFileExt(FileName, WS_NIL) + Sep + GetDateTimeFormat(AFormat, DT) + Ext;
+end;
+
+procedure TCobTools.GetFullAccess(const DLLPath, FileName: WideString);
+var
+  h: THandle;
+  Path: WideString;
+  Ext: function (const ObjectName: PWideChar): cardinal; stdcall;
+begin
+  Path:= DLLPath;
+
+  if (Path = WS_NIL) then
+    Path:= CobGetAppPathW();
+
+  Path:= CobSetBackSlashW(Path);
+
+  h:= LoadLibraryW(PWideChar(Path + WS_COBNTSEC));
+  if (h> 0) then
+  begin
+    @Ext:= GetProcAddress(h, PAnsiChar(S_LIBGRANTACCESS));
+    if (@Ext <> nil) then
+      Ext(PWideChar(FileName));
+    FreeLibrary(h);
+  end;
 end;
 
 function TCobTools.GetGoodFileNameW(const Input: WideString): WideString;

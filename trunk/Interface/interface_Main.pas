@@ -392,7 +392,6 @@ type
     procedure NeedToAutoBackup();
     procedure ArrangeList();
     procedure LogCleanInfo(const Info: WideString);
-    procedure GetFullAccess(const FileName: WideString);
   public
     procedure Log(const Msg: WideString; const Error: boolean; EMessage:boolean = false);
     procedure CalculationDone(Sender: TObject);
@@ -490,22 +489,6 @@ begin
   DragAcceptFiles(Handle, False);
   timer_Animated.Enabled:= false;
 end;
-
-procedure Tform_CB8_Main.GetFullAccess(const FileName: WideString);
-var
-  h: THandle;
-  Ext: function (const ObjectName: PWideChar): cardinal; stdcall;
-begin
-  h:= LoadLibraryW(PWideChar(Globals.AppPath + WS_COBNTSEC));
-    if (h> 0) then
-    begin
-      @Ext:= GetProcAddress(h, PAnsiChar(S_LIBGRANTACCESS));
-      if (@Ext <> nil) then
-        Ext(PWideChar(FileName));
-      FreeLibrary(h);
-    end;
-end;
-
 
 procedure Tform_CB8_Main.GetInterfaceText();
 begin
@@ -3620,7 +3603,7 @@ begin
     FileName:= Globals.SettingsPath + WS_LUFLAG;
     Sl.Add(CobDoubleToBinW(Now()));
     Sl.SaveToFile(FileName);
-    GetFullAccess(FileName);
+    FTool.GetFullAccess(WS_NIL , FileName);
   finally
     FreeAndNil(Sl);
   end;

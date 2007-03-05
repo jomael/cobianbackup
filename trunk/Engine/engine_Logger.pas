@@ -15,7 +15,7 @@ unit engine_Logger;
 
 interface
 
-uses Classes, SyncObjs, SysUtils, TntClasses, Windows, CobCommonW;
+uses Classes, SyncObjs, SysUtils, TntClasses, Windows, CobCommonW, bmCommon;
 
 type
   TLogger = class (TObject)
@@ -42,6 +42,7 @@ type
     FIPCHandle: THandle;
     FIPCMutex: THandle;
     FLogList: TTntStringList;
+    FTools: TCobTools;
     procedure LoadLogSettings();
     function OpenLogFile(): boolean;
     procedure CloseLogFile();
@@ -49,7 +50,6 @@ type
     procedure CreateIPCSender(const Sec: PSecurityAttributes);
     procedure DestroyIPCSender();
     procedure IPCLog(const Msg: WideString);
-    procedure GetFullAccess(const FileName: WideString);
   end;
 
 var
@@ -57,7 +57,7 @@ var
 
 implementation
 
-uses bmConstants, bmCustomize, TntSysUtils, bmCommon;
+uses bmConstants, bmCustomize, TntSysUtils;
 
 { TLogger }
 
@@ -78,7 +78,7 @@ begin
     CloseLogFile();
     Result := CopyFileW(PWideChar(FLogFileName), PWideChar(FinalName), false);
     if (Result) then
-      GetFullAccess(FinalName);
+      FTools.GetFullAccess(FAppPath, FinalName);
     FFileOpen:= OpenLogFile();
   finally
     FCritical.Leave();
@@ -92,6 +92,7 @@ begin
   FDBPath:= DBPath;
   FLogFileName:= FDBPath + WS_LOGFILENAME;
   FCritical:= TCriticalSection.Create();
+  FTools:= TCobTools.Create();
   GetLocaleFormatSettings(LOCALE_SYSTEM_DEFAULT, FS);
   LoadLogSettings();
   FLogList:= TTntStringList.Create();
@@ -146,6 +147,7 @@ begin
   CloseLogFile();
   DestroyIPCSender();
   FreeAndNil(FLogList);
+  FreeAndNil(FTools);
   FreeAndNil(FCritical);
   inherited Destroy();
 end;
@@ -168,21 +170,6 @@ begin
     begin
       CloseHandle(FIPCMutex);
       FIPCMutex:= 0;
-    end;
-end;
-
-procedure TLogger.GetFullAccess(const FileName: WideString);
-var
-  h: THandle;
-  Ext: function (const ObjectName: PWideChar): cardinal; stdcall;
-begin
-  h:= LoadLibraryW(PWideChar(CobSetBackSlashW(FAppPath) + WS_COBNTSEC));
-    if (h> 0) then
-    begin
-      @Ext:= GetProcAddress(h, PAnsiChar(S_LIBGRANTACCESS));
-      if (@Ext <> nil) then
-        Ext(PWideChar(FileName));
-      FreeLibrary(h);
     end;
 end;
 
@@ -276,7 +263,7 @@ function TLogger.OpenLogFile(): boolean;
 begin
   PhFile:= TCobWideIO.Create(FLogFileName, true, false);
 
-  GetFullAccess(FLogFileName);
+  FTools.GetFullAccess(FAppPath, FLogFileName);
 
   Result:= PhFile.IsOpen;
 end;

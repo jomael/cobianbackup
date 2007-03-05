@@ -19,7 +19,7 @@ object form_Main: Tform_Main
   OnCreate = FormCreate
   OnDestroy = TntFormDestroy
   OnShow = TntFormShow
-  PixelsPerInch = 120
+  PixelsPerInch = 96
   TextHeight = 16
   object p_Button: TTntPanel
     Left = 0
@@ -997,6 +997,10 @@ object form_Main: Tform_Main
     end
     object tab_Settings: TTntTabSheet
       TabVisible = False
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object l_InstallType: TTntLabel
         Left = 8
         Top = 1

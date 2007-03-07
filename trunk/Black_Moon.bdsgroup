@@ -8,9 +8,7 @@
 			<Option Name="GUID">{56AC1ABC-57DD-4812-BCDA-020ECC5FB09D}</Option>
 		</Option>
 	</PersonalityInfo>
-	<Default.Personality>  
-    
-    <Projects>
+	<Default.Personality>  <Projects>
       <Projects Name="Cobian.exe">Application\Cobian.bdsproj</Projects>
       <Projects Name="cbEngine.dll">Engine\cbEngine.bdsproj</Projects>
       <Projects Name="cbInterface.exe">Interface\cbInterface.bdsproj</Projects>

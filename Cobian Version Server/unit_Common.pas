@@ -23,6 +23,7 @@ const
   S_MUTEXNAMEOLD = 'Global\%s Mutex Name';
   INT_ENCCOUNT = 4;
   S_NIL = '';
+  S_SPACE = ' ';
   S_APPNAMEENTER = 'Enter the name of the application';
   S_APPNAMEEMPTY = 'The name of the application cannot be empty';
   S_APPNAMEUNIQUE = 'The application name must be unique';
@@ -37,6 +38,18 @@ const
   S_LOGSTRING = '%s %s %s %s';
   S_COBIANHEADER = '*@COBIANHEADER@*';
   S_ERROR = 'ERROR';
+  C_COLON = ':';
+  C_SEMICOLON = ';';
+  C_SLASH = '/';
+  C_SLASDASH = '-';
+  C_BACKSLASH = '\';
+  C_ASTERISC = '*';
+  C_QUESTION = '?';
+  C_MORETHAN = '>';
+  C_LESSTHAN = '<';
+  C_PIPE = '|';
+  S_DISCONNECTED = 'Connection Closed Gracefully';
+  INT_FILELIMIT = 1073741824;
 
 
 type

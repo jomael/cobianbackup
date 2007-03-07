@@ -111,6 +111,7 @@ function CobExecuteAndWait(App, Param: string; Hide: boolean= false): longbool;
 function CobIsNTBased(): boolean;
 function CobIs2000orBetter(): boolean;
 function CobIsXPorBetter(): boolean;
+function CobIsVistaOrbetter(): boolean;
 
 function CobGenerateID(): string;
 function CobGetFragment(const AText, Terminator, NoText: string; const MaxChar: integer): string;
@@ -215,6 +216,14 @@ begin
     if (Win32MajorVersion > 4) then
       if (Win32MinorVersion > 0) then
         Result:= true;
+end;
+
+function CobIsVistaOrBetter(): boolean;
+begin
+  Result:= false;
+  if CobIsNTBased() then
+    if (Win32MajorVersion > 5) then
+      Result:= true;
 end;
 
 

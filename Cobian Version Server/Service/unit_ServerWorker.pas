@@ -14,6 +14,8 @@ type
     FLogName: string;
     FLog: TextFile;
     FS: TFormatSettings;
+    procedure ResetFile();
+    function GetGoodFileName(const Original: string): string;
   public
     constructor Create();
     destructor Destroy(); override;
@@ -160,13 +162,15 @@ end;
 
 procedure TWorker.OnException(AThread: TIdContext; AException: Exception);
 begin
-  FLog.Log(S_ERROR, AException.Message, S_NIL);
+  if Pos(S_DISCONNECTED ,AException.Message) = 0 then
+    FLog.Log(S_ERROR, AException.Message, S_NIL);
 end;
 
 procedure TWorker.OnListenException(AThread: TIdListenerThread;
   AException: Exception);
 begin
-  FLog.Log(S_ERROR, AException.Message, S_NIL);
+  if Pos(S_DISCONNECTED ,AException.Message) = 0 then
+    FLog.Log(S_ERROR, AException.Message, S_NIL);
 end;
 
 procedure TWorker.ServerExecute(AThread: TIdContext);
@@ -219,12 +223,72 @@ begin
   inherited Destroy();
 end;
 
+function TLogger.GetGoodFileName(const Original: string): string;
+begin
+  Result:= Original;
+  // Some file names could have a date-time that contains : or /
+  if (Pos(C_COLON, Result) > 0) then
+    Result:= StringReplace(Result, C_COLON, C_SEMICOLON, [rfReplaceAll, rfIgnoreCase]);
+
+  if (Pos(C_SLASH, Result) > 0) then
+    Result:= StringReplace(Result, C_SLASH, C_SLASDASH,  [rfReplaceAll, rfIgnoreCase]);
+
+  if (Pos(C_BACKSLASH, Result) > 0) then
+    Result:= StringReplace(Result, C_BACKSLASH, C_SLASDASH, [rfReplaceAll, rfIgnoreCase]);
+
+  if (Pos(C_ASTERISC, Result) > 0) then
+    Result:= StringReplace(Result, C_ASTERISC, C_SLASDASH, [rfReplaceAll, rfIgnoreCase]);
+
+  if (Pos(C_QUESTION, Result) > 0) then
+    Result:= StringReplace(Result, C_QUESTION, C_SLASDASH, [rfReplaceAll, rfIgnoreCase]);
+
+  if (Pos(C_MORETHAN, Result) > 0) then
+    Result:= StringReplace(Result, C_MORETHAN, C_SLASDASH, [rfReplaceAll, rfIgnoreCase]);
+
+  if (Pos(C_LESSTHAN, Result) > 0) then
+    Result:= StringReplace(Result, C_LESSTHAN, C_SLASDASH,[rfReplaceAll, rfIgnoreCase]);
+
+  if (Pos(C_PIPE, Result) > 0) then
+    Result:= StringReplace(Result, C_PIPE, C_SLASDASH, [rfReplaceAll, rfIgnoreCase]);
+end;
+
 procedure TLogger.Log(const IP, App, Version: string);
+var
+  NeedToReset: boolean;
 begin
   FCS.Enter();
   try
+    NeedToReset:= false;
     WriteLn(FLog, Format(S_LOGSTRING,[DateTimeToStr(Now(),FS),IP, App, Version],FS));
     Flush(Flog);
+    // 2007-03-07 by Luis Cobian
+    // The service used to hang when the file got too big
+    if (FileSize(FLog) > INT_FILELIMIT) then
+      NeedToReset:= true;
+  finally
+    FCS.Leave();
+  end;
+
+  if NeedToReset then
+    ResetFile();
+end;
+
+procedure TLogger.ResetFile();
+var
+  NewName: string;
+begin
+  FCS.Enter();
+  try
+    CloseFile(FLog);
+    NewName:= CobSetBackSlash(FAppPath) +
+              Format(S_LOG,[S_APPNAME +  S_SPACE +
+              GetGoodFileName(DateTimeToStr(Now(),FS))], FS);
+    RenameFile(FLogName, Newname);
+    DeleteFile(PChar(FLogName));
+    if (not FileExists(FLogName)) then
+      CobCreateEmptyTextFile(FLogName);
+    AssignFile(FLog, FLogName);
+    Append(FLog);
   finally
     FCS.Leave();
   end;

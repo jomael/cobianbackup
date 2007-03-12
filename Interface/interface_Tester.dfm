@@ -16,7 +16,7 @@ object form_Tester: Tform_Tester
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   OnShow = FormShow
-  PixelsPerInch = 120
+  PixelsPerInch = 96
   TextHeight = 16
   object m_Log: TTntRichEdit
     Left = 0

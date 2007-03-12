@@ -263,8 +263,12 @@ begin
       SMTP.Password:= AnsiString(Sl.Values[WS_INISMTPPASSWORD]);
       SMTP.ConnectTimeout:= Settings.GetTCPConnectionTimeOut();
       SMTP.UseEhlo:= CobStrToBoolW(Sl.Values[Sl.Values[WS_INISMTPEHLO]]);
-      SMTP.PipeLine:=  CobStrToBoolW(Sl.Values[Sl.Values[WS_INISMTPPIPELINE]]);
-      SMTP.HeloName:= AnsiString(Sl.Values[Sl.Values[WS_INISMTPHELONAME]]);
+
+      //2007-03-12 by Luis Cobian
+      // Fixed a bug that prevented to test against Login servers
+
+      SMTP.PipeLine:=  CobStrToBoolW(Sl.Values[WS_INISMTPPIPELINE]);
+      SMTP.HeloName:= AnsiString(Sl.Values[WS_INISMTPHELONAME]);
       SMTP.ReadTimeout:= Settings.GetTCPReadTimeOut();
       SMTP.MailAgent:= AnsiString(WS_PROGRAMNAMESHORT);
 

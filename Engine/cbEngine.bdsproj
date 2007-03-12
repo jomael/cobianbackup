@@ -150,7 +150,7 @@
 			<VersionInfo Name="MajorVer">8</VersionInfo>
 			<VersionInfo Name="MinorVer">3</VersionInfo>
 			<VersionInfo Name="Release">0</VersionInfo>
-			<VersionInfo Name="Build">197</VersionInfo>
+			<VersionInfo Name="Build">198</VersionInfo>
 			<VersionInfo Name="Debug">False</VersionInfo>
 			<VersionInfo Name="PreRelease">False</VersionInfo>
 			<VersionInfo Name="Special">False</VersionInfo>
@@ -162,7 +162,7 @@
 		<VersionInfoKeys>
 			<VersionInfoKeys Name="CompanyName">Luis Cobian</VersionInfoKeys>
 			<VersionInfoKeys Name="FileDescription">Cobian Backup Black Moon Engine</VersionInfoKeys>
-			<VersionInfoKeys Name="FileVersion">8.3.0.197</VersionInfoKeys>
+			<VersionInfoKeys Name="FileVersion">8.3.0.198</VersionInfoKeys>
 			<VersionInfoKeys Name="InternalName">Black Moon</VersionInfoKeys>
 			<VersionInfoKeys Name="LegalCopyright">© 2000-2006 by Luis Cobian</VersionInfoKeys>
 			<VersionInfoKeys Name="LegalTrademarks">All rights reserved</VersionInfoKeys>

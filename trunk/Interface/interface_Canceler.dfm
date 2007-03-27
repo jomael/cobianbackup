@@ -17,7 +17,7 @@ object form_Canceler: Tform_Canceler
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   OnShow = FormShow
-  PixelsPerInch = 120
+  PixelsPerInch = 96
   TextHeight = 16
   object l_Caption: TTntLabel
     Left = 9

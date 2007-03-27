@@ -18,7 +18,7 @@ object form_MainForm: Tform_MainForm
   OnCloseQuery = TntFormCloseQuery
   OnCreate = TntFormCreate
   OnDestroy = TntFormDestroy
-  PixelsPerInch = 120
+  PixelsPerInch = 96
   TextHeight = 16
   object pc_Main: TTntPageControl
     Left = 0
@@ -177,6 +177,10 @@ object form_MainForm: Tform_MainForm
     object tab_Keys: TTntTabSheet
       Caption = 'Keys'
       ImageIndex = 1
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object im_Keys: TTntImage
         Left = 3
         Top = 16
@@ -1495,6 +1499,10 @@ object form_MainForm: Tform_MainForm
     object tab_Log: TTntTabSheet
       Caption = 'Log'
       ImageIndex = 2
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object p_Bottom: TTntPanel
         Left = 0
         Top = 241
@@ -1558,6 +1566,10 @@ object form_MainForm: Tform_MainForm
     object tab_About: TTntTabSheet
       Caption = 'About'
       ImageIndex = 3
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object l_Decryptor: TTntLabel
         Left = 128
         Top = 15

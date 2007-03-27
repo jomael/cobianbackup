@@ -2,7 +2,7 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ~~~~~~~~~~                                                            ~~~~~~~~~~
 ~~~~~~~~~~                Cobian Backup Black Moon                    ~~~~~~~~~~
-~~~~~~~~~~            Copyright 200-2006 by Luis Cobian               ~~~~~~~~~~
+~~~~~~~~~~            Copyright 2000-2006 by Luis Cobian              ~~~~~~~~~~
 ~~~~~~~~~~                     cobian@educ.umu.se                     ~~~~~~~~~~
 ~~~~~~~~~~                    All rights reserved                     ~~~~~~~~~~
 ~~~~~~~~~~                                                            ~~~~~~~~~~
@@ -106,7 +106,7 @@ begin
     begin
       IPCMasterCS.Enter();
       try
-        if (CommandList.Count <> 0) then
+        if (CommandList.Count > 0) then
           begin
             FCommands.Assign(CommandList);
             CommandList.Clear();
@@ -115,7 +115,7 @@ begin
         IPCMasterCS.Leave();
       end;
 
-      if (FCommands.Count <> 0) then
+      if (FCommands.Count > 0) then
         begin
           if WaitForSingleObject(FIPCMutex, INFINITE) = WAIT_OBJECT_0 then
             try

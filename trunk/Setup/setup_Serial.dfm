@@ -18,7 +18,7 @@ object form_Serial: Tform_Serial
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   OnShow = FormShow
-  PixelsPerInch = 120
+  PixelsPerInch = 96
   TextHeight = 16
   object l_Serial: TTntLabel
     Left = 8

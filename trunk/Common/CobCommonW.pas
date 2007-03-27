@@ -21,6 +21,7 @@ uses Windows, TntSysUtils, SysUtils, TntSystem,Classes, TntClasses;
 type
   TCobCRCCallbackW = function (const FileName: WideString;
                                     const Progress: integer): boolean of object;
+  TCobBytes = array of Byte;
   
   TCobWideIO = class(TObject)    //incomplete. Only write methods done
   private
@@ -42,7 +43,7 @@ type
 
   TCobDirectoryW = (cobWindows,cobSystem,cobPersonal,cobTemporary,cobDeskTop,
                     cobStartMenu, cobStartUp, cobFavorites, cobProgramLinks,
-                    cobAppData, cobCommonDesktop, cobCommonStartUp,
+                    cobAppData, cobLocalAppdata, cobCommonDesktop, cobCommonStartUp,
                     cobCommonProgramLinks, cobCommonStartMenu);
   TCobAutostartW = (cobNoAS, cobLocalAS, cobGlobalAS, cobBothAS);
 
@@ -140,6 +141,11 @@ function CobStringReplaceW(const Input, OldStr, NewString: WideString;
 function CobCalculateCRCW(const FileName: WideString;
                                       CallBack: TCobCRCCallbackW): longword;
 
+procedure CobWideStringToArray(Dest: PWideChar; const Source: WideString);
+procedure CobWideStringToBytesW(var Buffer:TCobBytes; const Str: WideString);
+function CobBytesToIntegerW(const Buffer: TCobBytes): longint;
+function CobBytesToWideStringW(const Buffer: TCobBytes): WideString;
+procedure CobIntegerToBytesW(var Buffer: TCobBytes; const Value: longint);
 
 implementation
 
@@ -1284,6 +1290,7 @@ begin
     cobFavorites: Result:= CobGetShellFolderW(CSIDL_FAVORITES);
     cobProgramLinks: Result:= CobGetShellFolderW(CSIDL_PROGRAMS);
     cobAppData: Result:= CobGetShellFolderW(CSIDL_APPDATA);
+    cobLocalAppdata: Result:= CobGetShellFolderW(CSIDL_LOCAL_APPDATA);
     cobCommonDesktop: Result:= CobGetShellFolderW(CSIDL_COMMON_DESKTOPDIRECTORY);
     cobCommonStartUp: Result:= CobGetShellFolderW(CSIDL_COMMON_STARTUP);
     cobCommonProgramLinks: Result:= CobGetShellFolderW(CSIDL_COMMON_PROGRAMS);
@@ -1346,6 +1353,7 @@ begin
   if (not (SetSecurityDescriptorDACL(pSecurityDesc,
     True, nil, False))) then
   begin
+    FreeMem(pSecurityDesc, SECURITY_DESCRIPTOR_REVISION);
     pSecurityDesc := nil;
     exit;
   end;
@@ -1837,6 +1845,56 @@ begin
     FreeAndNil(Sl);
     FreeAndNil(Reg);
   end;
+end;
+
+procedure CobWideStringToArray(Dest: PWideChar; const Source: WideString);
+var
+  SourceLength: integer;
+  // This copies a wide string into an array of WideChars
+  // NO LENGHT CHECK IS DONE so the array must have space to
+  // copy the widestring plus the final #0
+begin
+  // The check of the size should be done ouside. It should be place for the last #0
+  SourceLength:= Length(Source);
+  if SourceLength > 0 then
+    Move(Source[1], Dest[0], SourceLength * SizeOf(WideChar));
+  Dest[SourceLength] := #0;
+end;
+
+procedure CobWideStringToBytesW(var Buffer: TCobBytes; const Str: WideString);
+var
+  Size: longint;
+begin
+  Size:= Length(Str) * SizeOf(WideChar);
+
+  SetLength(Buffer, Size);
+  FillChar(Buffer[0], Size, #0);
+
+  if (Size > 0) then
+    Move(Str[1], Buffer[0], Size);
+end;
+
+function CobBytesToIntegerW(const Buffer: TCobBytes): longint;
+begin
+  Result:= 0;
+  if (Length(Buffer) = SizeOf(Longint)) then
+    Move(Buffer[0], Result , SizeOf(LongInt));
+end;
+
+function CobBytesToWideStringW(const Buffer: TCobBytes): WideString;
+begin
+  Result:= WS_NIL;
+  if (Length(Buffer) = 0) then
+    Exit;
+
+  SetLength(Result,Length(Buffer) div 2);
+  Move(Buffer[0],Result[1],Length(Buffer));
+end;
+
+procedure CobIntegerToBytesW(var Buffer: TCobBytes; const Value: longint);
+begin
+  SetLength(Buffer,SizeOf(Longint));
+  Move(Value, Buffer[0], SizeOf(LongInt));
 end;
 
 end.

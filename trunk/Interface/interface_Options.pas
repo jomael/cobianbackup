@@ -2,7 +2,7 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ~~~~~~~~~~                                                            ~~~~~~~~~~
 ~~~~~~~~~~                Cobian Backup Black Moon                    ~~~~~~~~~~
-~~~~~~~~~~            Copyright 200-2006 by Luis Cobian               ~~~~~~~~~~
+~~~~~~~~~~            Copyright 2000-2006 by Luis Cobian              ~~~~~~~~~~
 ~~~~~~~~~~                     cobian@educ.umu.se                     ~~~~~~~~~~
 ~~~~~~~~~~                    All rights reserved                     ~~~~~~~~~~
 ~~~~~~~~~~                                                            ~~~~~~~~~~
@@ -199,6 +199,8 @@ type
     cb_MailScheduled: TTntCheckBox;
     cb_PropagateMasks: TTntCheckBox;
     cb_ShowGrid: TTntCheckBox;
+    cb_Pipes: TTntCheckBox;
+    l_Warning: TTntLabel;
     procedure cb_MailScheduledClick(Sender: TObject);
     procedure b_SLogonClick(Sender: TObject);
     procedure b_SInstallClick(Sender: TObject);
@@ -1242,6 +1244,9 @@ begin
   cb_PropagateMasks.Hint:= Translator.GetInterfaceText('726');
   cb_ShowGrid.Caption:= Translator.GetInterfaceText('728');
   cb_ShowGrid.Hint:= Translator.GetInterfaceText('729');
+  cb_Pipes.Caption:= Translator.GetInterfaceText('730');
+  cb_Pipes.Hint:= Translator.GetInterfaceText('731');
+  l_Warning.Caption:= Translator.GetInterfaceText('732');
 end;
 
 function Tform_Options.InstallService(const ID, Password: PWideChar): boolean;
@@ -1491,6 +1496,7 @@ begin
   cb_RunDontAsk.Checked:= Settings.GetRunOldDontAsk();
   cb_MailScheduled.Checked:= Settings.GetMailScheduled();
   cb_PropagateMasks.Checked:= Settings.GetPropagateMasks();
+  cb_Pipes.Checked:= Settings.GetUsePipes();
 
   // User settings
   cb_ShowWelcome.Checked:= UISettings.ShowWelcomeScreen;
@@ -1644,6 +1650,7 @@ begin
   Settings.SetRunOldDontAsk(cb_RunDontAsk.Checked);
   Settings.SetMailScheduled(cb_MailScheduled.Checked);
   Settings.SetPropagateMasks(cb_PropagateMasks.Checked);
+  Settings.SetUsePipes(cb_Pipes.Checked);
 
   // User settings
   UISettings.ShowWelcomeScreen:= cb_ShowWelcome.Checked;

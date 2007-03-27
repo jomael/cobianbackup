@@ -16,7 +16,7 @@ object form_Main: Tform_Main
   OnClose = TntFormClose
   OnCreate = TntFormCreate
   OnDestroy = TntFormDestroy
-  PixelsPerInch = 120
+  PixelsPerInch = 96
   TextHeight = 16
   object p_Bottom: TTntPanel
     Left = 0

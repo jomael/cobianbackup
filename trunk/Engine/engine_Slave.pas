@@ -2,7 +2,7 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ~~~~~~~~~~                                                            ~~~~~~~~~~
 ~~~~~~~~~~                Cobian Backup Black Moon                    ~~~~~~~~~~
-~~~~~~~~~~            Copyright 200-2006 by Luis Cobian               ~~~~~~~~~~
+~~~~~~~~~~            Copyright 2000-2006 by Luis Cobian              ~~~~~~~~~~
 ~~~~~~~~~~                     cobian@educ.umu.se                     ~~~~~~~~~~
 ~~~~~~~~~~                    All rights reserved                     ~~~~~~~~~~
 ~~~~~~~~~~                                                            ~~~~~~~~~~
@@ -235,8 +235,6 @@ begin
       SetAbortFlag();
       Exit;
     end;
-
-
 end;
 
 procedure TSlave.SetAbortFlag();

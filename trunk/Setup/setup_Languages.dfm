@@ -15,7 +15,7 @@ object form_Languages: Tform_Languages
   Scaled = False
   OnCreate = FormCreate
   OnShow = FormShow
-  PixelsPerInch = 120
+  PixelsPerInch = 96
   TextHeight = 16
   object i_Flags: TTntImage
     Left = 7

@@ -15,7 +15,7 @@ object form_Extractor: Tform_Extractor
   Scaled = False
   OnCreate = FormCreate
   OnShow = FormShow
-  PixelsPerInch = 120
+  PixelsPerInch = 96
   TextHeight = 16
   object l_Operation: TTntLabel
     Left = 8

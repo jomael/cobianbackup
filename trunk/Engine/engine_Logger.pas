@@ -2,7 +2,7 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ~~~~~~~~~~                                                            ~~~~~~~~~~
 ~~~~~~~~~~                Cobian Backup Black Moon                    ~~~~~~~~~~
-~~~~~~~~~~            Copyright 200-2006 by Luis Cobian               ~~~~~~~~~~
+~~~~~~~~~~            Copyright 2000-2006 by Luis Cobian              ~~~~~~~~~~
 ~~~~~~~~~~                     cobian@educ.umu.se                     ~~~~~~~~~~
 ~~~~~~~~~~                    All rights reserved                     ~~~~~~~~~~
 ~~~~~~~~~~                                                            ~~~~~~~~~~
@@ -15,7 +15,7 @@ unit engine_Logger;
 
 interface
 
-uses Classes, SyncObjs, SysUtils, TntClasses, Windows, CobCommonW, bmCommon;
+uses Classes, SyncObjs, SysUtils, TntClasses, Windows, CobCommonW, bmCommon, CobPipesW;
 
 type
   TLogger = class (TObject)
@@ -43,6 +43,8 @@ type
     FIPCMutex: THandle;
     FLogList: TTntStringList;
     FTools: TCobTools;
+    FUsePipes: boolean;
+    FPipeClient: TCobPipeClientW;
     procedure LoadLogSettings();
     function OpenLogFile(): boolean;
     procedure CloseLogFile();
@@ -96,38 +98,46 @@ begin
   GetLocaleFormatSettings(LOCALE_SYSTEM_DEFAULT, FS);
   LoadLogSettings();
   FLogList:= TTntStringList.Create();
+  FUsePipes:= Settings.GetUsePipes();
   CreateIPCSender(Sec);
   FFileOpen:= OpenLogFile();
 end;
 
 procedure TLogger.CreateIPCSender(const Sec: PSecurityAttributes);
 var
-  FName, MName: WideString;
+  FName, MName, PName: WideString;
 begin
-  // Create the MMF which will send the log strings to
-  // the client in "real time"
+  if (FUsePipes) then
+  begin
+    PName:= WideFormat(WS_LOGTOLOGPIPE,[WS_PROGRAMNAMESHORTNOISPACES],FS);
+    FPipeClient:= TCobPipeClientW.Create(PName, Sec);
+    FPipeClient.Connect();
+  end else
+  begin
+    // Create the MMF which will send the log strings to
+    // the client in "real time"
 
-  if (CobIs2000orBetterW) then
-    begin
-      FName:= WideFormat(WS_MMFLOG,[WS_PROGRAMNAMELONG],FS);
-      MName:= WideFormat(WS_MMFLOGMUTEX,[WS_PROGRAMNAMELONG],FS);
-    end else
-    begin
-      FName:= WideFormat(WS_MMFLOGOLD,[WS_PROGRAMNAMELONG],FS);
-      MName:= WideFormat(WS_MMFLOGMUTEXOLD,[WS_PROGRAMNAMELONG],FS);
-    end;
+    if (CobIs2000orBetterW) then
+      begin
+        FName:= WideFormat(WS_MMFLOG,[WS_PROGRAMNAMELONG],FS);
+        MName:= WideFormat(WS_MMFLOGMUTEX,[WS_PROGRAMNAMELONG],FS);
+      end else
+      begin
+        FName:= WideFormat(WS_MMFLOGOLD,[WS_PROGRAMNAMELONG],FS);
+        MName:= WideFormat(WS_MMFLOGMUTEXOLD,[WS_PROGRAMNAMELONG],FS);
+      end;
 
-  FIPCMutex:= CreateMutexW(sec, False, PWideChar(MName));
+    FIPCMutex:= CreateMutexW(sec, False, PWideChar(MName));
 
-  FIPCHandle := CreateFileMappingW(INVALID_HANDLE_VALUE,
-                                    sec,
-                                    PAGE_READWRITE,
-                                    INT_NIL,
-                                    INT_MAXFILESIZE,
-                                    PWideChar(FName));
+    FIPCHandle := CreateFileMappingW(INVALID_HANDLE_VALUE,
+                                      sec,
+                                      PAGE_READWRITE,
+                                      INT_NIL,
+                                      INT_MAXFILESIZE,
+                                      PWideChar(FName));
 
-  FSenderPointer := MapViewOfFile(FIPCHandle, FILE_MAP_ALL_ACCESS, 0, 0, 0);
-
+    FSenderPointer := MapViewOfFile(FIPCHandle, FILE_MAP_ALL_ACCESS, 0, 0, 0);
+  end;
 end;
 
 procedure TLogger.DeletelogFile();
@@ -154,39 +164,57 @@ end;
 
 procedure TLogger.DestroyIPCSender();
 begin
-  if (FSenderPointer <> nil) then
+  if (FUsePipes) then
   begin
-    UnmapViewOfFile(FSenderPointer);
-    FSenderPointer:= nil;
+    if (FPipeClient <> nil) then
+    begin
+      FPipeClient.Disconnect();
+      FreeAndNil(FPipeClient);
+    end;
+  end else
+  begin
+    if (FSenderPointer <> nil) then
+    begin
+      UnmapViewOfFile(FSenderPointer);
+      FSenderPointer:= nil;
+    end;
+
+    if (FIPCHandle <> 0) then
+      begin
+        CloseHandle(FIPCHandle);
+        FIPCHandle:= 0;
+      end;
+
+    if (FIPCMutex <> 0) then
+      begin
+        CloseHandle(FIPCMutex);
+        FIPCMutex:= 0;
+      end;
   end;
-
-  if (FIPCHandle <> 0) then
-    begin
-      CloseHandle(FIPCHandle);
-      FIPCHandle:= 0;
-    end;
-
-  if (FIPCMutex <> 0) then
-    begin
-      CloseHandle(FIPCMutex);
-      FIPCMutex:= 0;
-    end;
 end;
 
 procedure TLogger.IPCLog(const Msg: WideString);
 begin
-  if WaitForSingleObject(FIPCMutex, INFINITE) = WAIT_OBJECT_0 then
-    try
-      if FSenderPointer <> nil then
-        begin
-         FLogList.CommaText:= FSenderPointer;
-         FLogList.Add(Msg);
-         if (Length(FLogList.CommaText) < (INT_MAXFILESIZE div SizeOf(WideChar)) - 4) then
-          lstrcpyW(FSenderPointer,PWideChar(FLogList.CommaText));
-        end;
-    finally
-      ReleaseMutex(FIPCMutex);
-    end;
+  if (FUsePipes) then
+  begin
+    FLogList.Clear();
+    FLogList.Add(Msg);
+    FPipeClient.SendStringW(FLogList.CommaText, INT_LOGINFO);
+  end else
+  begin
+    if WaitForSingleObject(FIPCMutex, INFINITE) = WAIT_OBJECT_0 then
+      try
+        if FSenderPointer <> nil then
+          begin
+           FLogList.CommaText:= FSenderPointer;
+           FLogList.Add(Msg);
+           if (Length(FLogList.CommaText) < (INT_MAXFILESIZE div SizeOf(WideChar)) - 4) then
+            lstrcpyW(FSenderPointer,PWideChar(FLogList.CommaText));
+          end;
+      finally
+        ReleaseMutex(FIPCMutex);
+      end;
+  end;
 end;
 
 procedure TLogger.LoadLogSettings();

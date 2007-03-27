@@ -997,10 +997,6 @@ object form_Main: Tform_Main
     end
     object tab_Settings: TTntTabSheet
       TabVisible = False
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object l_InstallType: TTntLabel
         Left = 8
         Top = 1

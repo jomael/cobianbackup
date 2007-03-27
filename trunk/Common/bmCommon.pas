@@ -2,7 +2,7 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ~~~~~~~~~~                                                            ~~~~~~~~~~
 ~~~~~~~~~~                Cobian Backup Black Moon                    ~~~~~~~~~~
-~~~~~~~~~~            Copyright 200-2006 by Luis Cobian               ~~~~~~~~~~
+~~~~~~~~~~            Copyright 2000-2006 by Luis Cobian              ~~~~~~~~~~
 ~~~~~~~~~~                     cobian@educ.umu.se                     ~~~~~~~~~~
 ~~~~~~~~~~                    All rights reserved                     ~~~~~~~~~~
 ~~~~~~~~~~                                                            ~~~~~~~~~~
@@ -394,6 +394,8 @@ type
     procedure SetRunOldDontAsk(const Value: boolean);
     function GetPropagateMasks(): boolean;
     procedure SetPropagateMasks(const Value: boolean);
+    function GetUsePipes(): boolean;
+    procedure SetUsePipes(const Value: boolean);
     function TaskNameExists(const TaskName: WideString; var ID: WideString): integer;
     function TaskIDExists(const TaskName: WideString): integer;
     procedure CopyTask(const Index: integer; var DestTask: TTask);overload;
@@ -496,6 +498,7 @@ type
     FRunOldBackups: boolean;
     FRunDontAsk: boolean;
     FPropagateMasks: boolean;
+    FUsePipes: boolean;
     FTools: TCobTools;
     procedure ClearList();
     function GetDefaultListName(): WideString;
@@ -1758,6 +1761,16 @@ begin
   end;
 end;
 
+function TSettings.GetUsePipes(): boolean;
+begin
+  FCritical.Enter();
+  try
+    Result:= FUsePipes;
+  finally
+    FCritical.Leave();
+  end;
+end;
+
 function TSettings.GetUncompressed(): WideString;
 begin
   FCritical.Enter();
@@ -1865,7 +1878,7 @@ end;
 procedure TSettings.LoadSettings();
 var
   Sl: TTntStringList;
-  SOut: WideString;
+  SOut, UsePipes: WideString;
   OK: boolean;
 begin
   Sl := TTntStringList.Create();
@@ -1950,6 +1963,15 @@ begin
     SetRunOldBackups(CobStrToBoolW(Sl.Values[WS_INIRUNOLD]));
     SetRunOldDontAsk(CobStrToBoolW(Sl.Values[WS_INIRUNOLDDONTASK]));
     SetPropagateMasks(CobStrToBoolW(Sl.Values[WS_INIPROPAGATEMASKS]));
+    // This setting was added after Vista... so check if it exists first!!!
+    UsePipes:= Sl.Values[WS_INIUSEPIPES];
+    if (UsePipes = WS_NIL) then
+    begin
+      if (CobIsVistaOrBetterW()) then
+        SetUsePipes(true) else
+        SetUsePipes(false);
+    end else
+      SetUsePipes(CobStrToBoolW(UsePipes));
   finally
     FreeAndNil(Sl);
     ReleaseMutex(FMutexIni);
@@ -2116,6 +2138,9 @@ begin
         SetRunOldBackups(false);
         SetRunOldDontAsk(false);
         SetPropagateMasks(false);
+        if (CobIsVistaOrBetterW()) then
+          SetUsePipes(true) else
+          SetUsePipes(false);
       end;;
     Sl.Add(WideFormat(WS_INIFORMAT,[WS_INICURRENTLIST,GetList()],FS));
     Sl.Add(WideFormat(WS_INIFORMAT,[WS_INILANGUAGE,GetLanguage()],FS));
@@ -2197,6 +2222,7 @@ begin
     Sl.Add(WideFormat(WS_INIFORMAT,[WS_INIRUNOLD, CobBoolToStrW(GetRunOldBackups())],FS));
     Sl.Add(WideFormat(WS_INIFORMAT,[WS_INIRUNOLDDONTASK, CobBoolToStrW(GetRunOldDontAsk())],FS));
     Sl.Add(WideFormat(WS_INIFORMAT,[WS_INIPROPAGATEMASKS,CobBoolToStrW(GetPropagateMasks())],FS));
+    Sl.Add(WideFormat(WS_INIFORMAT,[WS_INIUSEPIPES,CobBoolToStrW(GetUsePipes())],FS));
     Sl.SaveToFile(FIniFileName);
     //2007-03-05 by Luis Cobian
     // If this procedure is called from the Setup then the security DLL is not
@@ -2930,6 +2956,17 @@ begin
   try
     if (Value <> FUseCurrentDesktop) then
       FUseCurrentDesktop:= Value;
+  finally
+    FCritical.Leave();
+  end;
+end;
+
+procedure TSettings.SetUsePipes(const Value: boolean);
+begin
+  FCritical.Enter();
+  try
+    if (Value <> FUsePipes) then
+      FUsePipes:= Value;
   finally
     FCritical.Leave();
   end;

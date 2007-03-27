@@ -940,6 +940,10 @@ object form_Task: Tform_Task
       end
       object tab_Files: TTntTabSheet
         TabVisible = False
+        ExplicitLeft = 0
+        ExplicitTop = 0
+        ExplicitWidth = 0
+        ExplicitHeight = 0
         object l_Source: TTntLabel
           Left = 5
           Top = 22
@@ -1186,6 +1190,10 @@ object form_Task: Tform_Task
       end
       object tab_Sechedule: TTntTabSheet
         TabVisible = False
+        ExplicitLeft = 0
+        ExplicitTop = 0
+        ExplicitWidth = 0
+        ExplicitHeight = 0
         object l_ScheduleType: TTntLabel
           Left = 5
           Top = 1
@@ -1199,7 +1207,7 @@ object form_Task: Tform_Task
           Width = 188
           Height = 24
           Style = csDropDownList
-          ItemHeight = 16
+          ItemHeight = 0
           TabOrder = 0
           OnChange = cb_ScheduleTypeChange
         end
@@ -1348,7 +1356,7 @@ object form_Task: Tform_Task
             Width = 188
             Height = 24
             Style = csDropDownList
-            ItemHeight = 16
+            ItemHeight = 0
             TabOrder = 4
             OnChange = cb_ScheduleTypeChange
           end
@@ -1356,6 +1364,10 @@ object form_Task: Tform_Task
       end
       object tab_Archive: TTntTabSheet
         TabVisible = False
+        ExplicitLeft = 0
+        ExplicitTop = 0
+        ExplicitWidth = 0
+        ExplicitHeight = 0
         object gb_Compression: TTntGroupBox
           Left = 5
           Top = 3
@@ -1411,7 +1423,7 @@ object form_Task: Tform_Task
             Width = 191
             Height = 24
             Style = csDropDownList
-            ItemHeight = 16
+            ItemHeight = 0
             TabOrder = 0
             OnChange = cb_CompressionChange
           end
@@ -1421,7 +1433,7 @@ object form_Task: Tform_Task
             Width = 191
             Height = 24
             Style = csDropDownList
-            ItemHeight = 16
+            ItemHeight = 0
             TabOrder = 1
             OnChange = cb_CompressionChange
           end
@@ -1523,7 +1535,7 @@ object form_Task: Tform_Task
             Width = 191
             Height = 24
             Style = csDropDownList
-            ItemHeight = 16
+            ItemHeight = 0
             TabOrder = 0
             OnChange = cb_EncryptionChange
           end
@@ -1564,6 +1576,10 @@ object form_Task: Tform_Task
       end
       object tab_Special: TTntTabSheet
         TabVisible = False
+        ExplicitLeft = 0
+        ExplicitTop = 0
+        ExplicitWidth = 0
+        ExplicitHeight = 0
         object l_Include: TTntLabel
           Left = 5
           Top = 0
@@ -1745,6 +1761,10 @@ object form_Task: Tform_Task
       end
       object tab_Events: TTntTabSheet
         TabVisible = False
+        ExplicitLeft = 0
+        ExplicitTop = 0
+        ExplicitWidth = 0
+        ExplicitHeight = 0
         object l_Before: TTntLabel
           Left = 5
           Top = 0
@@ -1928,6 +1948,10 @@ object form_Task: Tform_Task
       end
       object tab_Advanced: TTntTabSheet
         TabVisible = False
+        ExplicitLeft = 0
+        ExplicitTop = 0
+        ExplicitWidth = 0
+        ExplicitHeight = 0
         object l_ImpersonateID: TTntLabel
           Left = 5
           Top = 64

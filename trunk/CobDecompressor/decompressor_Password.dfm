@@ -14,7 +14,7 @@ object form_Password: Tform_Password
   Position = poScreenCenter
   Scaled = False
   OnCreate = FormCreate
-  PixelsPerInch = 120
+  PixelsPerInch = 96
   TextHeight = 16
   object l_Password: TTntLabel
     Left = 8

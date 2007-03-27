@@ -15,7 +15,7 @@ object form_MessageBoxEx: Tform_MessageBoxEx
   Position = poScreenCenter
   Scaled = False
   OnCreate = FormCreate
-  PixelsPerInch = 120
+  PixelsPerInch = 96
   TextHeight = 16
   object l_Prompt: TTntLabel
     Left = 8

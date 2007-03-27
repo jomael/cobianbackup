@@ -17,7 +17,7 @@ object form_Balloon: Tform_Balloon
   OnClick = TntFormClick
   OnClose = TntFormClose
   OnCreate = TntFormCreate
-  PixelsPerInch = 120
+  PixelsPerInch = 96
   TextHeight = 16
   object p_Main: TTntPanel
     Left = 0

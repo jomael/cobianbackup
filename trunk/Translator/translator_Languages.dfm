@@ -17,7 +17,7 @@ object form_Languages: Tform_Languages
   ShowHint = True
   OnCreate = FormCreate
   OnShow = FormShow
-  PixelsPerInch = 120
+  PixelsPerInch = 96
   TextHeight = 16
   object l_New: TTntLabel
     Left = 8

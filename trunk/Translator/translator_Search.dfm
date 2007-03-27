@@ -14,7 +14,7 @@ object form_Search: Tform_Search
   Position = poScreenCenter
   Scaled = False
   OnCreate = FormCreate
-  PixelsPerInch = 120
+  PixelsPerInch = 96
   TextHeight = 16
   object TntLabel1: TTntLabel
     Left = 8

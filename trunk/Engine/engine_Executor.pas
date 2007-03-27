@@ -17,7 +17,7 @@ unit engine_Executor;
 interface
 
 uses
-  Classes, SysUtils, Windows, TntClasses, bmCommon;
+  Classes, SysUtils, Windows, TntClasses, bmCommon, CobPipesW;
 
 type
   TResultFile = record
@@ -74,6 +74,10 @@ type
     FCurrentFileName : WideString;
     FPartialPercent : integer;
     FTotalPercent : integer;
+    {FOldTotalPercent: integer;
+    FOldPartialPercent: integer;
+    FOldCurrentFileName: WideString;}
+
     // Settings
     FShowExactPercent: boolean;
     FMailOnBackup: boolean;
@@ -111,6 +115,9 @@ type
     FFTPSpeed: integer;
     FFTPASCII: WideString;
     FPropagate: boolean;
+    FPipeClient: TCobPipeClientW;
+    FUsePipes: boolean;
+    FOldPipeTime: cardinal;
     procedure SetInitialValues();
     procedure LoadLocalSettings();
     function NeedToReload(): boolean;
@@ -1162,6 +1169,7 @@ begin
   FFirstBackupTerminated:= true;
   GetLocaleFormatSettings(LOCALE_SYSTEM_DEFAULT, FS);
   LoadLocalSettings();
+  FUsePipes:= Settings.GetUsePipes();   // this should not be changed
   FTask:= TTask.Create();
   FMsg:= TTntStringList.Create();
   FResultFiles:= TList.Create();
@@ -1194,51 +1202,69 @@ end;
 
 procedure TExecutor.CreateIPCSender(const Sec: PSecurityAttributes);
 var
-  FName, MName: WideString;
+  FName, MName, PName: WideString;
 begin
   // Creates the IPC that will send the info about the current operation
-  if (CobIs2000orBetterW) then
-    begin
-      FName:= WideFormat(WS_MMFCURRENTOPNAME,[WS_PROGRAMNAMELONG],FS);
-      MName:= WideFormat(WS_MMFMUTEXCURRENTOPNAME,[WS_PROGRAMNAMELONG],FS);
-    end else
-    begin
-      FName:= WideFormat(WS_MMFCURRENTOPNAMEOLD,[WS_PROGRAMNAMELONG],FS);
-      MName:= WideFormat(WS_MMFMUTEXCURRENTOPNAMEOLD,[WS_PROGRAMNAMELONG],FS);
-    end;
+  if (FUsePipes) then
+  begin
+    PName:= WideFormat(WS_IENGINETOINTPIPE,[WS_PROGRAMNAMESHORTNOISPACES],FS);
+    FPipeClient:=TCobPipeClientW.Create(PName,FSec);
+    FPipeClient.Connect();
+  end else
+  begin
+    if (CobIs2000orBetterW) then
+      begin
+        FName:= WideFormat(WS_MMFCURRENTOPNAME,[WS_PROGRAMNAMELONG],FS);
+        MName:= WideFormat(WS_MMFMUTEXCURRENTOPNAME,[WS_PROGRAMNAMELONG],FS);
+      end else
+      begin
+        FName:= WideFormat(WS_MMFCURRENTOPNAMEOLD,[WS_PROGRAMNAMELONG],FS);
+        MName:= WideFormat(WS_MMFMUTEXCURRENTOPNAMEOLD,[WS_PROGRAMNAMELONG],FS);
+      end;
 
-  FIPCMutex:= CreateMutexW(sec, False, PWideChar(MName));
+    FIPCMutex:= CreateMutexW(sec, False, PWideChar(MName));
 
-  FIPCHandle := CreateFileMappingW(INVALID_HANDLE_VALUE,
-                                    sec,
-                                    PAGE_READWRITE,
-                                    INT_NIL,
-                                    INT_MAXFILESIZE,
-                                    PWideChar(FName));
+    FIPCHandle := CreateFileMappingW(INVALID_HANDLE_VALUE,
+                                      sec,
+                                      PAGE_READWRITE,
+                                      INT_NIL,
+                                      INT_MAXFILESIZE,
+                                      PWideChar(FName));
 
-  FSenderPointer := MapViewOfFile(FIPCHandle, FILE_MAP_ALL_ACCESS, 0, 0, 0);
+    FSenderPointer := MapViewOfFile(FIPCHandle, FILE_MAP_ALL_ACCESS, 0, 0, 0);
+  end;
 end;
 
 procedure TExecutor.DestroyIPCSender();
 begin
   //Destroy the IPC
-  if (FSenderPointer <> nil) then
+  if (FUsePipes) then
   begin
-    UnmapViewOfFile(FSenderPointer);
-    FSenderPointer:= nil;
+    if (FPipeClient <> nil) then
+    begin
+      FPipeClient.Disconnect();
+      FreeAndNil(FPipeClient);
+    end;
+  end else
+  begin
+    if (FSenderPointer <> nil) then
+    begin
+      UnmapViewOfFile(FSenderPointer);
+      FSenderPointer:= nil;
+    end;
+
+    if (FIPCHandle <> 0) then
+      begin
+        CloseHandle(FIPCHandle);
+        FIPCHandle:= 0;
+      end;
+
+    if (FIPCMutex <> 0) then
+      begin
+        CloseHandle(FIPCMutex);
+        FIPCMutex:= 0;
+      end;
   end;
-
-  if (FIPCHandle <> 0) then
-    begin
-      CloseHandle(FIPCHandle);
-      FIPCHandle:= 0;
-    end;
-
-  if (FIPCMutex <> 0) then
-    begin
-      CloseHandle(FIPCMutex);
-      FIPCMutex:= 0;
-    end;
 end;
 
 procedure TExecutor.DeleteBackup(const Backup: TBackup);
@@ -2538,6 +2564,8 @@ begin
 end;
 
 procedure TExecutor.SendStatus(const Operation: integer; const Std: boolean = true);
+var
+  PipeTime: cardinal;
 begin
   FMsg.Clear();
 
@@ -2568,20 +2596,36 @@ begin
   end;
 
   FMsg.Add(CobIntToStrW(FTotalPercent));
-  
-  if WaitForSingleObject(FIPCMutex, INFINITE) = WAIT_OBJECT_0 then
-    try
-      if FSenderPointer <> nil then
-      begin
-        FWriter.CommaText:= FSenderPointer;
-        FWriter.Add(FMsg.CommaText);
-        if (Length(FWriter.CommaText) < (INT_MAXFILESIZE div SizeOf(WideChar)) - 4) then
-          lstrcpyW(FSenderPointer,PWideChar(FWriter.CommaText));
-        FWriter.Clear();
+
+  if (FUsePipes) then
+  begin
+    // This will slow down the process A LOT because of some critical sections
+    // in the IPC pipe , so send only when 1000 ms have gone as a minimum
+    // this is non-critical anyway
+    PipeTime:= GetTickCount();
+    if  (Operation < INT_OPCOPY) or (Operation > INT_OPDELETING) or
+       ((PipeTime - FOldPipeTime) > INT_1000MS) then
+      FOldPipeTime:= PipeTime else
+      Exit;
+    FWriter.Add(FMsg.CommaText);
+    FPipeClient.SendStringW(FWriter.CommaText, INT_NORMALMESSAGEFROMENGINE);
+    FWriter.Clear();
+  end else
+  begin
+    if WaitForSingleObject(FIPCMutex, INFINITE) = WAIT_OBJECT_0 then
+      try
+        if FSenderPointer <> nil then
+        begin
+          FWriter.CommaText:= FSenderPointer;
+          FWriter.Add(FMsg.CommaText);
+          if (Length(FWriter.CommaText) < (INT_MAXFILESIZE div SizeOf(WideChar)) - 4) then
+            lstrcpyW(FSenderPointer,PWideChar(FWriter.CommaText));
+          FWriter.Clear();
+        end;
+      finally
+        ReleaseMutex(FIPCMutex);
       end;
-    finally
-      ReleaseMutex(FIPCMutex);
-    end;
+  end;
 end;
 
 procedure TExecutor.SetInitialValues();
@@ -2593,6 +2637,7 @@ begin
   FCurrentFileName := WS_NIL;
   FPartialPercent := INT_NIL;
   FTotalPercent := INT_NIL;
+  FOldPipeTime:= INT_NIL;
 end;
 
 procedure TExecutor.Sqx(const Source, Destination: WideString);

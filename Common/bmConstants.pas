@@ -2,7 +2,7 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ~~~~~~~~~~                                                            ~~~~~~~~~~
 ~~~~~~~~~~                Cobian Backup Black Moon                    ~~~~~~~~~~
-~~~~~~~~~~            Copyright 200-2006 by Luis Cobian               ~~~~~~~~~~
+~~~~~~~~~~            Copyright 2000-2006 by Luis Cobian              ~~~~~~~~~~
 ~~~~~~~~~~                     cobian@educ.umu.se                     ~~~~~~~~~~
 ~~~~~~~~~~                    All rights reserved                     ~~~~~~~~~~
 ~~~~~~~~~~                                                            ~~~~~~~~~~
@@ -36,6 +36,8 @@ const
   INT_UIRESPONSESLEEP = 800;
   INT_UIRESULTDONE = 1;
   INT_FIVEMULTIPLE = 5;
+  INT_THREEMULTIPLE = 3;
+  INT_1000MS = 1000;
   INT_SLOW = 300;
   INT_SERVICESLEEP = 1000;
   INT_SERVICEOP = 3000;
@@ -268,12 +270,15 @@ const
   INT_FOURPARAMS = 4;
   INT_WEEK = 7;
   INT_PROGRESSINFO = 5;
+  INT_LOGINFO = 5;
   INT_FTPDEFSPEED = 28672;
   BOOL_DOABORT = true;
   BOOL_CONTINUE = false;
   WS_MAILTO: WideString = 'mailto:%s';
   INT_SENDERBEFORE = 0;
   INT_100 = 100;
+  INT_NORMALMESSAGETOENGINE = 0;
+  INT_NORMALMESSAGEFROMENGINE = 0;
   INT_SENDERAFTER = 1;
   INT_SENDERSOURCE = 0;
   INT_SENDERDESTINATION = 1;
@@ -725,6 +730,7 @@ const
   WS_INIRUNOLD: WideString = 'Run old backups';
   WS_INIRUNOLDDONTASK: WideString = 'Run old backups without asking';
   WS_INIPROPAGATEMASKS: WideString = 'Propagate masks';
+  WS_INIUSEPIPES: WideString = 'Use pipes';
   WS_INIAUTOSETUPNAME: WideString = 'Name';
   WS_INIAUTOSETUPORGANIZATION: WideString = 'Organization';
   WS_INIAUTOSETUPSERIAL: WideString = 'Serial number';
@@ -736,6 +742,9 @@ const
   WS_INIAUTOID: WideString = 'ID';
   WS_INIAUTOPASSWORD = 'Password';
   WS_INIAUTOUI: WideString = 'Autostart UI';
+  WS_INTTOENGINEPIPE: WideString = '%s_Interface_To_Engine';
+  WS_IENGINETOINTPIPE: WideString = '%s_Engine_To_Interface';
+  WS_LOGTOLOGPIPE: WideString = '%s_Log_To_Log';
 
   // Installation
   INT_INSTALLAPPALL = 0;

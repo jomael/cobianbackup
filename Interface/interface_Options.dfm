@@ -18,7 +18,7 @@ object form_Options: Tform_Options
   OnCreate = TntFormCreate
   OnDestroy = TntFormDestroy
   OnShow = TntFormShow
-  PixelsPerInch = 120
+  PixelsPerInch = 96
   TextHeight = 16
   object p_Bottom: TTntPanel
     Left = 0
@@ -1098,6 +1098,13 @@ object form_Options: Tform_Options
           Height = 16
           Caption = 'Buffer size'
         end
+        object l_Warning: TTntLabel
+          Left = 24
+          Top = 318
+          Width = 108
+          Height = 16
+          Caption = '(*) Need to restart'
+        end
         object e_TCPRead: TTntEdit
           Left = 5
           Top = 20
@@ -1141,6 +1148,14 @@ object form_Options: Tform_Options
           Width = 210
           Height = 24
           TabOrder = 5
+        end
+        object cb_Pipes: TTntCheckBox
+          Left = 5
+          Top = 296
+          Width = 414
+          Height = 17
+          Caption = 'Use pipes'
+          TabOrder = 6
         end
       end
       object tab_Zip: TTntTabSheet

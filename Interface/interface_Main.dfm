@@ -37,7 +37,6 @@ object form_CB8_Main: Tform_CB8_Main
     Align = alLeft
     BevelOuter = bvNone
     TabOrder = 1
-    ExplicitHeight = 661
     object lv_List: TTntListView
       Left = 0
       Top = 0
@@ -69,7 +68,6 @@ object form_CB8_Main: Tform_CB8_Main
       OnDragOver = lv_ListDragOver
       OnKeyDown = lv_ListKeyDown
       OnKeyUp = lv_ListKeyUp
-      ExplicitHeight = 661
     end
   end
   object panel_Right: TTntPanel
@@ -80,7 +78,6 @@ object form_CB8_Main: Tform_CB8_Main
     Align = alClient
     BevelOuter = bvNone
     TabOrder = 2
-    ExplicitHeight = 661
     object pc_Main: TTntPageControl
       Left = 0
       Top = 0
@@ -92,10 +89,8 @@ object form_CB8_Main: Tform_CB8_Main
       Images = il_Tabs
       Style = tsFlatButtons
       TabOrder = 0
-      ExplicitHeight = 446
       object tab_Properties: TTntTabSheet
         Caption = '&Properties'
-        ExplicitHeight = 627
         object lv_Properties: TTntListView
           Left = 0
           Top = 0
@@ -116,12 +111,14 @@ object form_CB8_Main: Tform_CB8_Main
           TabOrder = 0
           ViewStyle = vsReport
           OnDblClick = lv_PropertiesDblClick
-          ExplicitHeight = 627
         end
       end
       object tab_History: TTntTabSheet
         Caption = '&History'
         ImageIndex = 1
+        ExplicitLeft = 0
+        ExplicitTop = 0
+        ExplicitWidth = 0
         ExplicitHeight = 412
         object lv_History: TTntListView
           Left = 0
@@ -154,6 +151,9 @@ object form_CB8_Main: Tform_CB8_Main
       object tab_Log: TTntTabSheet
         Caption = '&Log'
         ImageIndex = 2
+        ExplicitLeft = 0
+        ExplicitTop = 0
+        ExplicitWidth = 0
         ExplicitHeight = 412
         object re_Log: TTntRichEdit
           Left = 0
@@ -166,12 +166,14 @@ object form_CB8_Main: Tform_CB8_Main
           ScrollBars = ssBoth
           TabOrder = 0
           WordWrap = False
-          ExplicitHeight = 412
         end
       end
       object tab_Help: TTntTabSheet
         Caption = '&Help'
         ImageIndex = 3
+        ExplicitLeft = 0
+        ExplicitTop = 0
+        ExplicitWidth = 0
         ExplicitHeight = 412
         object tb_Help: TTntToolBar
           Left = 0
@@ -279,7 +281,6 @@ object form_CB8_Main: Tform_CB8_Main
     BevelInner = bvLowered
     BevelOuter = bvNone
     TabOrder = 3
-    ExplicitTop = 702
     object status_Right: TTntPanel
       Left = 451
       Top = 1

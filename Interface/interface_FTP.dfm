@@ -17,7 +17,7 @@ object form_FTP: Tform_FTP
   OnCreate = TntFormCreate
   OnDestroy = TntFormDestroy
   OnShow = TntFormShow
-  PixelsPerInch = 120
+  PixelsPerInch = 96
   TextHeight = 16
   object p_Bottom: TTntPanel
     Left = 0

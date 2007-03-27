@@ -17,7 +17,7 @@ object form_About: Tform_About
   OnCreate = TntFormCreate
   OnKeyDown = TntFormKeyDown
   OnShow = TntFormShow
-  PixelsPerInch = 120
+  PixelsPerInch = 96
   TextHeight = 16
   object img_About: TTntImage
     Left = 0

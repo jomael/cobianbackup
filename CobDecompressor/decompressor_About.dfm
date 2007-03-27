@@ -14,7 +14,7 @@ object form_About: Tform_About
   Position = poScreenCenter
   Scaled = False
   OnShow = FormShow
-  PixelsPerInch = 120
+  PixelsPerInch = 96
   TextHeight = 16
   object l_Tool: TTntLabel
     Left = 56

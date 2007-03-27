@@ -17,7 +17,7 @@ object form_Main: Tform_Main
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
   OnDestroy = FormDestroy
-  PixelsPerInch = 120
+  PixelsPerInch = 96
   TextHeight = 16
   object re_Log: TTntRichEdit
     Left = 0

@@ -17,7 +17,7 @@ object form_Main: Tform_Main
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   OnShow = FormShow
-  PixelsPerInch = 120
+  PixelsPerInch = 96
   TextHeight = 16
   object re_Memo: TTntRichEdit
     Left = 0

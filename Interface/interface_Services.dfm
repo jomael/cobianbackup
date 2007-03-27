@@ -16,7 +16,7 @@ object form_Services: Tform_Services
   OnCreate = FormCreate
   OnResize = TntFormResize
   OnShow = FormShow
-  PixelsPerInch = 120
+  PixelsPerInch = 96
   TextHeight = 16
   object p_Bottom: TTntPanel
     Left = 0

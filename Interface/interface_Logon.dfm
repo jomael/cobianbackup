@@ -16,7 +16,7 @@ object form_Logon: Tform_Logon
   ShowHint = True
   OnCreate = FormCreate
   OnShow = FormShow
-  PixelsPerInch = 120
+  PixelsPerInch = 96
   TextHeight = 16
   object l_Logon: TTntLabel
     Left = 8

@@ -2,7 +2,7 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ~~~~~~~~~~                                                            ~~~~~~~~~~
 ~~~~~~~~~~                Cobian Backup Black Moon                    ~~~~~~~~~~
-~~~~~~~~~~            Copyright 200-2006 by Luis Cobian               ~~~~~~~~~~
+~~~~~~~~~~            Copyright 2000-2006 by Luis Cobian              ~~~~~~~~~~
 ~~~~~~~~~~                     cobian@educ.umu.se                     ~~~~~~~~~~
 ~~~~~~~~~~                    All rights reserved                     ~~~~~~~~~~
 ~~~~~~~~~~                                                            ~~~~~~~~~~
@@ -35,10 +35,14 @@ uses
   bmEncryptor in '..\Common\bmEncryptor.pas',
   engine_Zipper in 'engine_Zipper.pas',
   engine_SQX in 'engine_SQX.pas',
-  bmFTP in '..\Common\bmFTP.pas';
+  bmFTP in '..\Common\bmFTP.pas',
+  engine_SlavePipes in 'engine_SlavePipes.pas';
 
 {$R *.res}
 
+
+var
+  UsePipes: boolean;
 
 procedure CreateCriticalSections();
 begin
@@ -96,19 +100,41 @@ begin
   // This thread will receive the commands from the UI
   // in previous versions, this was implemented as TCP/IP
   // It uses now MMF
-  Slave:= TSlave.Create(@Globals.Sec); 
-  Slave.FreeOnTerminate:= false;
-  Slave.Resume();   
+
+  //2007-03-19 by Luis Cobian
+  // Vista with UCA doesn't like MMF, so I use pipes instead.
+  if (UsePipes) then
+  begin
+    SlavePipe:= TSlavePipe.Create(@Globals.Sec);
+    SlavePipe.FreeOnTerminate:= false;
+    SlavePipe.Resume();
+  end else
+  begin
+    Slave:= TSlave.Create(@Globals.Sec);
+    Slave.FreeOnTerminate:= false;
+    Slave.Resume();
+  end;
 end;
 
 procedure DestroySlaveIPC();
 begin
-  if (Slave <> nil) then
+  if (UsePipes) then
+  begin
+    if (SlavePipe <> nil) then
     begin
-      Slave.Terminate();
-      Slave.WaitFor();
-      FreeAndNil(Slave);
+      SlavePipe.Terminate();
+      SlavePipe.WaitFor();
+      FreeAndNil(SlavePipe);
     end;
+  end else
+  begin
+    if (Slave <> nil) then
+      begin
+        Slave.Terminate();
+        Slave.WaitFor();
+        FreeAndNil(Slave);
+      end;
+  end;
 end;
 
 
@@ -331,6 +357,8 @@ begin
   Settings:= TSettings.Create(@Globals.Sec, Globals.AppPath,
                               Globals.DBPath, Globals.SettingsPath);
   Settings.LoadSettings();
+
+  UsePipes:= Settings.GetUsePipes();
 
   // Create the translator object
   Translator := TTranslator.Create(@Globals.Sec, Globals.AppPath, Globals.LanguagesPath);

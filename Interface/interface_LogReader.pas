@@ -2,7 +2,7 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ~~~~~~~~~~                                                            ~~~~~~~~~~
 ~~~~~~~~~~                Cobian Backup Black Moon                    ~~~~~~~~~~
-~~~~~~~~~~            Copyright 200-2006 by Luis Cobian               ~~~~~~~~~~
+~~~~~~~~~~            Copyright 2000-2006 by Luis Cobian              ~~~~~~~~~~
 ~~~~~~~~~~                     cobian@educ.umu.se                     ~~~~~~~~~~
 ~~~~~~~~~~                    All rights reserved                     ~~~~~~~~~~
 ~~~~~~~~~~                                                            ~~~~~~~~~~
@@ -16,12 +16,12 @@ unit interface_LogReader;
 interface
 
 uses
-  Classes, SysUtils, TntClasses, Windows;
+  Classes, SysUtils, TntClasses, Windows, CobPipesW;
 
 type
   TLogReader = class(TThread)
   public
-    constructor Create(const Sec: PSecurityAttributes);
+    constructor Create(const UsePipes:boolean; const Sec: PSecurityAttributes);
     destructor Destroy(); override;
   private
     { Private declarations }
@@ -29,7 +29,11 @@ type
     FLogHandle: Thandle;
     FN: WideString;
     FLogList: TTntStringList;
+    FUsePipes: boolean;
+    FPipeServer: TCobPipeServerW;
+    FS: TFormatSettings;
     procedure SendLogLines();
+    procedure OnReceive(const Msg: WideString; const Kind: byte);
   protected
     procedure Execute(); override;
   end;
@@ -40,32 +44,49 @@ uses CobCommonW, bmConstants, bmCustomize, interface_Main;
 
 { TLogReader }
 
-constructor TLogReader.Create(const Sec: PSecurityAttributes);
+constructor TLogReader.Create(const UsePipes:boolean; const Sec: PSecurityAttributes);
 var
-  MN: WideString;
+  MN, Pname: WideString;
 begin
   inherited Create(true);
-  //Creates the IPC tthat receives commands from the interface
-  if (CobIs2000orBetterW()) then
-    begin
-      FN:= WideFormat(WS_MMFLOG,[WS_PROGRAMNAMELONG]);
-      MN:= WideFormat(WS_MMFLOGMUTEX,[WS_PROGRAMNAMELONG]);
-    end else
-    begin
-      FN:= WideFormat(WS_MMFLOGOLD,[WS_PROGRAMNAMELONG]);
-      MN:= WideFormat(WS_MMFLOGMUTEXOLD,[WS_PROGRAMNAMELONG]);
-    end;
-  FLogMutex:= CreateMutexW(sec, False, PWideChar(MN));
+  FUsePipes:= UsePipes;
+  GetLocaleFormatSettings(LOCALE_SYSTEM_DEFAULT, FS);
+
+  if (FUsePipes) then
+  begin
+    PName:= WideFormat(WS_LOGTOLOGPIPE,[WS_PROGRAMNAMESHORTNOISPACES],FS);
+    FPipeServer:= TCobPipeServerW.Create(PName, Sec);
+    FPipeServer.OnReceive:= OnReceive;
+  end else
+  begin
+    //Creates the IPC tthat receives commands from the interface
+    if (CobIs2000orBetterW()) then
+      begin
+        FN:= WideFormat(WS_MMFLOG,[WS_PROGRAMNAMELONG]);
+        MN:= WideFormat(WS_MMFLOGMUTEX,[WS_PROGRAMNAMELONG]);
+      end else
+      begin
+        FN:= WideFormat(WS_MMFLOGOLD,[WS_PROGRAMNAMELONG]);
+        MN:= WideFormat(WS_MMFLOGMUTEXOLD,[WS_PROGRAMNAMELONG]);
+      end;
+    FLogMutex:= CreateMutexW(sec, False, PWideChar(MN));
+  end;
   FLogList:= TTntStringList.Create();
 end;
 
 destructor TLogReader.Destroy();
 begin
   FreeAndNil(FLogList);
-  if (FLogMutex <> 0) then
+  if (FUsePipes) then
   begin
-    CloseHandle(FLogMutex);
-    FLogMutex:= 0;
+    FreeAndNil(FPipeServer);
+  end else
+  begin
+    if (FLogMutex <> 0) then
+    begin
+      CloseHandle(FLogMutex);
+      FLogMutex:= 0;
+    end;
   end;
 
   inherited Destroy();
@@ -77,12 +98,14 @@ var
 begin
   while not Terminated do
     begin
-      if WaitForSingleObject(FLogMutex, INFINITE) = WAIT_OBJECT_0 then
-      try
-        //The MMF should have been created by the engine
-        //try to open it
-        FLogHandle:=  OpenFileMappingW(FILE_MAP_ALL_ACCESS, False, PWideChar(FN));
-        if (FLogHandle <> 0) then
+      if (not FUsePipes) then
+      begin
+        if WaitForSingleObject(FLogMutex, INFINITE) = WAIT_OBJECT_0 then
+        try
+          //The MMF should have been created by the engine
+          //try to open it
+          FLogHandle:=  OpenFileMappingW(FILE_MAP_ALL_ACCESS, False, PWideChar(FN));
+          if (FLogHandle <> 0) then
           begin
             FileStr:=  PWideChar(MapViewOfFile(FLogHandle,
                                         File_Map_All_Access,
@@ -105,9 +128,18 @@ begin
         finally
           ReleaseMutex(FLogMutex);
         end;
-
-        Sleep(INT_MMFLOGREADERSLEEP);
       end;
+
+    Sleep(INT_MMFLOGREADERSLEEP);
+  end;
+end;
+
+procedure TLogReader.OnReceive(const Msg: WideString; const Kind: byte);
+begin
+  FLogList.CommaText:= Msg;
+  if (FLogList.Count > 0) then
+    Synchronize(SendLogLines);
+  FLogList.Clear();
 end;
 
 procedure TLogReader.SendLogLines();

@@ -2,7 +2,7 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ~~~~~~~~~~                                                            ~~~~~~~~~~
 ~~~~~~~~~~                Cobian Backup Black Moon                    ~~~~~~~~~~
-~~~~~~~~~~            Copyright 200-2006 by Luis Cobian               ~~~~~~~~~~
+~~~~~~~~~~            Copyright 2000-2006 by Luis Cobian              ~~~~~~~~~~
 ~~~~~~~~~~                     cobian@educ.umu.se                     ~~~~~~~~~~
 ~~~~~~~~~~                    All rights reserved                     ~~~~~~~~~~
 ~~~~~~~~~~                                                            ~~~~~~~~~~
@@ -20,7 +20,8 @@ uses
   Dialogs, StdCtrls, TntClasses, TntForms,ShellApi, ImgList, interface_Common,
   Menus, TntMenus, ComCtrls, TntComCtrls, bmCommon, ExtCtrls, TntExtCtrls,
   ToolWin, interface_Logreader, interface_Master, interface_InfoReader, CobBarW,
-  TntDialogs, SHDocVw, bmConstants, ActiveX;
+  TntDialogs, SHDocVw, bmConstants, ActiveX, interface_Master_Pipes,
+  interface_InfoReader_Pipes;
 
 type
   /// This is the class for the main form. If you are customizing
@@ -271,10 +272,12 @@ type
     FAtomName: WideString;
     FLogReaderThread: TLogReader;
     FMaster: TIPCMaster;
+    FMasterPipes: TIPCMasterPipe;
     FEncoder: TTntStringList;
     FTool: TCobTools;
     FBackingUp: boolean;
     FInfoReader: TInfoReader;
+    FInfoReaderPipes: TInfoReaderPipe;
     FConnected: boolean;
     FAnimated: boolean;
     FFullDestroy: boolean;
@@ -301,6 +304,7 @@ type
     FOleInPlaceActiveObject: IOleInPlaceActiveObject;
     iOIPAO: IOleInPlaceActiveObject;
     Dispatch: IDispatch;
+    FPipes: boolean;
     procedure CloseEngine();
     procedure CreateTray();
     procedure DestroyTray();
@@ -703,6 +707,8 @@ begin
   FTool:= TCobTools.Create();
 
   GetInterfaceText();
+
+  FPipes:= Settings.GetUsePipes();
 
   CreateLogReader();
 
@@ -1735,16 +1741,24 @@ end;
 
 procedure Tform_CB8_Main.CreateInfoReader();
 begin
-  FInfoReader:= TInfoReader.Create(@Globals.Sec);
-  FInfoReader.FreeOnTerminate:= false;
-  FInfoReader.Resume();
+  if (FPipes) then
+  begin
+    FInfoReaderPipes:= TInfoReaderPipe.Create(@Globals.Sec);
+    FInfoReaderPipes.FreeOnTerminate:= false;
+    FInfoReaderPipes.Resume();
+  end else
+  begin
+    FInfoReader:= TInfoReader.Create(@Globals.Sec);
+    FInfoReader.FreeOnTerminate:= false;
+    FInfoReader.Resume();
+  end;
 end;
 
 procedure Tform_CB8_Main.CreateLogReader();
 begin
   // Creates the thread that received the log file lines
   // from the engine
-  FLogReaderThread:= TLogReader.Create(@Globals.Sec);
+  FLogReaderThread:= TLogReader.Create(FPipes, @Globals.Sec);
   FLogReaderThread.FreeOnTerminate:= false;
   FLogReaderThread.Resume();
 end;
@@ -1755,9 +1769,17 @@ begin
   IPCMasterCS:= TCriticalSection.Create();
   CommandList:= TTntStringList.Create();
   FEncoder:= TTntStringList.Create();
-  FMaster:= TIPCMaster.Create(Globals.AppPath, @Globals.Sec);
-  FMaster.FreeOnTerminate:= false;
-  FMaster.Resume();
+  if (FPipes) then
+  begin
+    FMasterPipes:= TIPCMasterPipe.Create(@Globals.Sec);
+    FMasterPipes.FreeOnTerminate:= false;
+    FMasterPipes.Resume();
+  end else
+  begin
+    FMaster:= TIPCMaster.Create(Globals.AppPath, @Globals.Sec);
+    FMaster.FreeOnTerminate:= false;
+    FMaster.Resume();
+  end;
 end;
 
 procedure Tform_CB8_Main.CreateTray();
@@ -1814,11 +1836,22 @@ end;
 
 procedure Tform_CB8_Main.DestroyInfoReader();
 begin
-  if (FInfoReader <> nil) then
+  if (FPipes) then
   begin
-    FInfoReader.Terminate();
-    FInfoReader.WaitFor();
-    FreeAndNil(FInfoReader);
+    if (FInfoReaderPipes <> nil) then
+    begin
+      FInfoReaderPipes.Terminate();
+      FInfoReaderPipes.WaitFor();
+      FreeAndNil(FInfoReaderPipes);
+    end;
+  end else
+  begin
+    if (FInfoReader <> nil) then
+    begin
+      FInfoReader.Terminate();
+      FInfoReader.WaitFor();
+      FreeAndNil(FInfoReader);
+    end;
   end;
 end;
 
@@ -1842,11 +1875,19 @@ begin
     end;
 end;
 
-procedure Tform_CB8_Main.DestroyMaster;
+procedure Tform_CB8_Main.DestroyMaster();
 begin
-  FMaster.Terminate();
-  FMaster.WaitFor();
-  FreeAndNil(FMaster);
+  if (FPipes) then
+  begin
+    FMasterPipes.Terminate();
+    FMasterPipes.WaitFor();
+    FreeAndNil(FMasterPipes);
+  end else
+  begin
+    FMaster.Terminate();
+    FMaster.WaitFor();
+    FreeAndNil(FMaster);
+  end;
   FreeAndNil(FEncoder);
   FreeAndNil(CommandList);
   FreeAndNil(IPCMasterCS);

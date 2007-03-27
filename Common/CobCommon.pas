@@ -156,6 +156,7 @@ begin
   if (not (SetSecurityDescriptorDACL(pSecurityDesc,
     True, nil, False))) then
   begin
+    FreeMem(pSecurityDesc, SECURITY_DESCRIPTOR_REVISION);
     pSecurityDesc := nil;
     exit;
   end;

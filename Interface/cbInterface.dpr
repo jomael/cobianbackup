@@ -2,7 +2,7 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ~~~~~~~~~~                                                            ~~~~~~~~~~
 ~~~~~~~~~~                Cobian Backup Black Moon                    ~~~~~~~~~~
-~~~~~~~~~~            Copyright 200-2006 by Luis Cobian               ~~~~~~~~~~
+~~~~~~~~~~            Copyright 2000-2006 by Luis Cobian              ~~~~~~~~~~
 ~~~~~~~~~~                     cobian@educ.umu.se                     ~~~~~~~~~~
 ~~~~~~~~~~                    All rights reserved                     ~~~~~~~~~~
 ~~~~~~~~~~                                                            ~~~~~~~~~~
@@ -50,7 +50,9 @@ uses
   interface_Tester in 'interface_Tester.pas' {form_Tester},
   interface_Update in 'interface_Update.pas',
   interface_BackupForcer in 'interface_BackupForcer.pas',
-  interface_Logon in 'interface_Logon.pas' {form_Logon};
+  interface_Logon in 'interface_Logon.pas' {form_Logon},
+  interface_Master_Pipes in 'interface_Master_Pipes.pas',
+  interface_InfoReader_Pipes in 'interface_InfoReader_Pipes.pas';
 
 {$R *.res}
 

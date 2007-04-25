@@ -87,6 +87,7 @@ function CobSetQuotesIfNeeded(s: string): string;
 function CobGetComputerName(): string;
 function CobFileExists(FileName: string): boolean;
 function CobSetDotExtension(const Ext: string): string;
+function CobGetLegalFileName(const FileName: AnsiString): AnsiString;
 
 //Other rutines
 procedure DisableProcessWindowsGhosting();
@@ -1053,6 +1054,49 @@ begin
   if (Length(Ext) > 0) then
     if (Ext[1] <> '.') then
       Result:= '.' + Ext;
+end;
+
+//*************************************************
+
+function CobGetLegalFileName(const FileName: AnsiString): AnsiString;
+const
+  C_COLON: AnsiChar = ':';
+  C_SEMICOLON: AnsiChar = ';';
+  C_SLASH: AnsiChar = '/';
+  C_SLASDASH: AnsiChar = '-';
+  C_BACKSLASH: AnsiChar= '\';
+  C_ASTERISC: AnsiChar= '*';
+  C_QUESTION: AnsiChar= '?';
+  C_MORETHAN: AnsiChar= '>';
+  C_LESSTHAN: AnsiChar= '<';
+  C_PIPE: AnsiChar= '|';
+
+begin
+  Result:= FileName;
+  // Some file names could have a date-time that contains : or /
+  if (Pos(C_COLON, Result) > 0) then
+    Result:= StringReplace(Result, C_COLON, C_SEMICOLON, [rfReplaceAll, rfIgnoreCase]);
+
+  if (Pos(C_SLASH, Result) > 0) then
+    Result:= StringReplace(Result, C_SLASH, C_SLASDASH, [rfReplaceAll, rfIgnoreCase]);
+
+  if (Pos(C_BACKSLASH, Result) > 0) then
+    Result:= StringReplace(Result, C_BACKSLASH, C_SLASDASH, [rfReplaceAll, rfIgnoreCase]);
+
+  if (Pos(C_ASTERISC, Result) > 0) then
+    Result:= StringReplace(Result, C_ASTERISC, C_SLASDASH, [rfReplaceAll, rfIgnoreCase]);
+
+  if (Pos(C_QUESTION, Result) > 0) then
+    Result:= StringReplace(Result, C_QUESTION, C_SLASDASH, [rfReplaceAll, rfIgnoreCase]);
+
+  if (Pos(C_MORETHAN, Result) > 0) then
+    Result:= StringReplace(Result, C_MORETHAN, C_SLASDASH, [rfReplaceAll, rfIgnoreCase]);
+
+  if (Pos(C_LESSTHAN, Result) > 0) then
+    Result:= StringReplace(Result, C_LESSTHAN, C_SLASDASH, [rfReplaceAll, rfIgnoreCase]);
+
+  if (Pos(C_PIPE, Result) > 0) then
+    Result:= StringReplace(Result, C_PIPE, C_SLASDASH, [rfReplaceAll, rfIgnoreCase]);
 end;
 
 //*************************************************

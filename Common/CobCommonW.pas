@@ -18,6 +18,8 @@ interface
 
 uses Windows, TntSysUtils, SysUtils, TntSystem,Classes, TntClasses;
 
+{$WARN SYMBOL_PLATFORM OFF}
+
 type
   TCobCRCCallbackW = function (const FileName: WideString;
                                     const Progress: integer): boolean of object;
@@ -57,6 +59,7 @@ function CobSetLeadingForwardSlashW(const FileName:WideString): WideString;
 function CobCreateEmptyTextFileW(const FileName: WideString): boolean;
 function CobGetComputerNameW(): WideString;
 function CobSysErrorMessageW(const ErrorCode: cardinal): WideString;
+function CobGetLegalFileNameW(const FileName: WideString): WideString;
 
 function CobMaskMatchW(const Source, Mask: WideString;
         const CaseSensitive: boolean = false;
@@ -70,6 +73,9 @@ function CobGetShortDirectoryNameW(const Dir: WideString): WideString;
 function CobGetShortDirectoryNameFW(const Dir: WideString): WideString;
 
 function CobNormalizeFileNameW(const FileName: WideString): WideString;
+
+function CobExecuteW(const FileName, Param: WideString;
+                            const Hide, Wait: boolean): cardinal;
 
 function CobExecuteAndWaitW(const FileName, Param: WideString;
                                     Hide: boolean = false): cardinal;
@@ -344,15 +350,56 @@ begin
   end;
 end;
 
-function CobExecuteAndWaitW(const FileName, Param: WideString;
-                                    Hide: boolean = false): cardinal;
+function CobGetLegalFileNameW(const FileName: WideString): WideString;
+const
+  WC_COLON: WideChar = ':';
+  WC_SEMICOLON: WideChar = ';';
+  WC_SLASH: WideChar = '/';
+  WC_SLASDASH: WideChar = '-';
+  WC_BACKSLASH: WideChar= '\';
+  WC_ASTERISC: WideChar= '*';
+  WC_QUESTION: WideChar= '?';
+  WC_MORETHAN: WideChar= '>';
+  WC_LESSTHAN: WideChar= '<';
+  WC_PIPE: WideChar= '|';
+
+begin
+  Result:= FileName;
+  // Some file names could have a date-time that contains : or /
+  if (CobPosW(WC_COLON, Result, true) > 0) then
+    Result:= CobStringReplaceW(Result, WC_COLON, WC_SEMICOLON, true, true);
+
+  if (CobPosW(WC_SLASH, Result, true) > 0) then
+    Result:= CobStringReplaceW(Result, WC_SLASH, WC_SLASDASH, true, true);
+
+  if (CobPosW(WC_BACKSLASH, Result, true) > 0) then
+    Result:= CobStringReplaceW(Result, WC_BACKSLASH, WC_SLASDASH, true, true);
+
+  if (CobPosW(WC_ASTERISC, Result, true) > 0) then
+    Result:= CobStringReplaceW(Result, WC_ASTERISC, WC_SLASDASH, true, true);
+
+  if (CobPosW(WC_QUESTION, Result, true) > 0) then
+    Result:= CobStringReplaceW(Result, WC_QUESTION, WC_SLASDASH, true, true);
+
+  if (CobPosW(WC_MORETHAN, Result, true) > 0) then
+    Result:= CobStringReplaceW(Result, WC_MORETHAN, WC_SLASDASH, true, true);
+
+  if (CobPosW(WC_LESSTHAN, Result, true) > 0) then
+    Result:= CobStringReplaceW(Result, WC_LESSTHAN, WC_SLASDASH, true, true);
+
+  if (CobPosW(WC_PIPE, Result, true) > 0) then
+    Result:= CobStringReplaceW(Result, WC_PIPE, WC_SLASDASH, true, true);
+end;
+
+function CobExecuteW(const FileName, Param: WideString;
+                            const Hide, Wait: boolean): cardinal;
 var
   StartInfo: TStartupInfoW;
   ProcInfo: TProcessInformation;
   ExecStr: WideString;
   Code: longbool;
 begin
-  { fill with known state }
+ { fill with known state }
 
   FillChar(StartInfo, SizeOf(TStartupInfoW), #0);
   FillChar(ProcInfo, SizeOf(TProcessInformation), #0);
@@ -378,7 +425,7 @@ begin
     Result:= Windows.GetLastError();
 
   try
-    if (Code) then
+    if (Code and Wait) then
       WaitForSingleObject(ProcInfo.hProcess, INFINITE);
     //else
       //raise Exception.Create(CobSysErrorMessageW(System.GetLastError()));
@@ -389,11 +436,18 @@ begin
   end;
 end;
 
+function CobExecuteAndWaitW(const FileName, Param: WideString;
+                                    Hide: boolean = false): cardinal;
+begin
+  // For compatibility with old programs of mine
+  Result:= CobExecuteW(FileName, Param, Hide, true);
+end;
+
 
 function CobWideToStrByCodePage(const AValue : WideString; const ACodePage : integer): AnsiString;
 var
   Buf : PChar;
-  Size : integer; 
+  Size : integer;
 begin 
   Result := '';
   Size := WideCharToMultiByte(ACodePage, 0, PWideChar(AValue), -1 , nil, 0, nil, nil);
@@ -1758,7 +1812,7 @@ begin
       Proceed();
     WideFindClose(DirInfo);
   end;
-
+    
   Result:= RemoveDirectoryW(PWideChar(ADir));
 end;
 

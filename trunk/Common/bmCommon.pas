@@ -13,6 +13,8 @@
 
 unit bmCommon;
 
+{$INCLUDE CobianCompilers.inc}
+
 interface
 
 uses Windows, SysUtils, SyncObjs, Classes, TntClasses, CobCommonW;
@@ -591,7 +593,7 @@ implementation
 
 { TGlobalUtils }
 uses bmConstants, TntSysUtils, bmCustomize, CobEncrypt, ShellAPI, 
-  Messages, WideStrings;
+  Messages {$IFDEF COMPILER_9_UP}, WideStrings {$ENDIF};
 
 procedure ClearBUList();
 var

@@ -10,9 +10,11 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~}
 
 // Unit for FTP transfers. This unit is both used in the engine and
-// in the interface. Downloads and uploads are implemented 
+// in the interface. Downloads and uploads are implemented
 
 unit bmFTP;
+
+{$INCLUDE CobianCompilers.inc}
 
 interface
 
@@ -156,7 +158,7 @@ type
 
 implementation
 
-uses bmConstants, CobCommonW, bmTranslator, CobEncrypt, WideStrings,
+uses bmConstants, CobCommonW, bmTranslator, CobEncrypt, {$IFDEF COMPILER_9_UP} WideStrings, {$ENDIF}
   bmEncryptor;
 
 { TFTP }

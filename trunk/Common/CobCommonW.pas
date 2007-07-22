@@ -14,6 +14,8 @@
 *******************************************************************************}
 unit CobCommonW;
 
+{$INCLUDE CobianCompilers.inc}
+
 interface
 
 uses Windows, TntSysUtils, SysUtils, TntSystem,Classes, TntClasses;
@@ -48,6 +50,45 @@ type
                     cobAppData, cobLocalAppdata, cobCommonDesktop, cobCommonStartUp,
                     cobCommonProgramLinks, cobCommonStartMenu);
   TCobAutostartW = (cobNoAS, cobLocalAS, cobGlobalAS, cobBothAS);
+
+{$IFNDEF COMPILER_9_UP}
+type
+  PStartupInfoW = ^TStartupInfoW;
+  _STARTUPINFOW = record
+    cb: DWORD;
+    lpReserved: PWideChar;
+    lpDesktop: PWideChar;
+    lpTitle: PWideChar;
+    dwX: DWORD;
+    dwY: DWORD;
+    dwXSize: DWORD;
+    dwYSize: DWORD;
+    dwXCountChars: DWORD;
+    dwYCountChars: DWORD;
+    dwFillAttribute: DWORD;
+    dwFlags: DWORD;
+    wShowWindow: Word;
+    cbReserved2: Word;
+    lpReserved2: PByte;
+    hStdInput: THandle;
+    hStdOutput: THandle;
+    hStdError: THandle;
+  end;
+  {$EXTERNALSYM _STARTUPINFOW}
+  TStartupInfoW = _STARTUPINFOW;
+  STARTUPINFOW = _STARTUPINFOW;
+  {$EXTERNALSYM STARTUPINFOW}
+
+  {$EXTERNALSYM CreateProcessW}
+  function CreateProcessW(lpApplicationName: PWideChar; lpCommandLine: PWideChar;
+    lpProcessAttributes, lpThreadAttributes: PSecurityAttributes;
+    bInheritHandles: BOOL; dwCreationFlags: DWORD; lpEnvironment: Pointer;
+    lpCurrentDirectory: PWideChar; const lpStartupInfo: TStartupInfoW;
+    var lpProcessInformation: TProcessInformation): BOOL; stdcall;
+      external kernel32 name 'CreateProcessW';
+
+{$ENDIF}
+  
 
 /// File utilities
 function CobGetAppPathW(): WideString;
@@ -155,7 +196,7 @@ procedure CobIntegerToBytesW(var Buffer: TCobBytes; const Value: longint);
 
 implementation
 
-uses CobRegistryW, ShlObj;
+uses CobRegistryW, ShlObj {$IFNDEF COMPILER_9_UP} , ShFolder {$ENDIF};
 
 const
   WS_NIL: WideString = '';

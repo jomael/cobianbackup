@@ -15,6 +15,8 @@ unit interface_Calculator;
 
 interface
 
+{$INCLUDE CobianCompilers.inc}
+
 uses
   Classes, CobCommonW, bmCommon;
 
@@ -45,7 +47,9 @@ type
 
 implementation
 
-uses SysUtils, TntClasses, WideStrings, bmConstants, TntSysUtils;
+uses SysUtils, TntClasses,
+     {$IFDEF COMPILER_9_UP} WideStrings, {$ENDIF}
+     bmConstants, TntSysUtils;
 
 { TCalculator }
 

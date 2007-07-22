@@ -14,6 +14,8 @@
 *******************************************************************************}
 unit CobRegistryW;
 
+{$INCLUDE CobianCompilers.inc}
+
 interface
 
 uses Windows, Classes, SysUtils, TntClasses;
@@ -603,6 +605,12 @@ begin
     end;
   end;
 end;
+
+{$IFNDEF COMPILER_9_UP} // fix declaration for RegEnumValueW (lpValueName is a PWideChar)
+function RegEnumValueW(hKey: HKEY; dwIndex: DWORD; lpValueName: PWideChar;
+  var lpcbValueName: DWORD; lpReserved: Pointer; lpType: PDWORD;
+  lpData: PByte; lpcbData: PDWORD): Longint; stdcall; external advapi32 name 'RegEnumValueW';
+{$ENDIF}
 
 procedure TCobRegistryW.GetValueNames(Strings: TTntStrings);
 var

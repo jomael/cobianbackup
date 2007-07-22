@@ -89,7 +89,7 @@ var
 implementation
 
 {$R *.dfm}
-uses CobCommon;
+uses CobCommon, CobDialogsW;
 
 procedure Tform_Main.AddAnItem(const AName, AVersion, AHome, AInfo: string);
 begin
@@ -334,7 +334,7 @@ var
   i: integer;
 begin
   if (lb_Applications.SelCount > 0) then
-    if (MessageDlg(S_DELETESELECTED,mtConfirmation, mbOKCancel,0,mbCancel) = mrOK) then
+    if (CobMessageDlg(S_DELETESELECTED, mtConfirmation, mbOKCancel, 0, mbCancel) = mrOK) then
     begin
       for i:= lb_Applications.Items.Count-1 downto 0 do
         if (lb_Applications.Selected[i]) then

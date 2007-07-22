@@ -17,6 +17,15 @@ interface
 
 uses Classes, TntClasses, SysUtils, bmCommon, Windows, TntSysUtils, ZipForge;
 
+{$DEFINE ZIP_WIDESTRING}
+
+type
+   {$IFDEF ZIP_WIDESTRING}
+   zipstring=widestring;
+   {$ELSE}
+   zipstring=string;
+   {$ENDIF}
+
 type
   TZipperRec = record
     Temp: WideString;
@@ -125,24 +134,24 @@ type
     // Events
     procedure OnAfterOpen(Sender: TObject);
     procedure OnConfirmOverwrite(Sender: TObject;
-              SourceFileName: string; var DestFileName: string; var Confirm: Boolean);
-    procedure OnConfirmProcessFile(Sender: TObject; FileName: string;
+              SourceFileName: zipstring; var DestFileName: zipstring; var Confirm: Boolean);
+    procedure OnConfirmProcessFile(Sender: TObject; FileName: zipstring;
                 Operation: TZFProcessOperation; var Confirm: Boolean);
     procedure OnCopyTempFileProgress(Sender: TObject; Progress: Double;
             ProgressPhase: TZFProgressPhase; var Cancel: Boolean);
-    procedure OnFileProgress(Sender: TObject; FileName: string;
+    procedure OnFileProgress(Sender: TObject; FileName: zipstring;
             Progress: Double; Operation: TZFProcessOperation;
             ProgressPhase: TZFProgressPhase; var Cancel: Boolean);
     procedure OnOverallProgress(Sender: TObject; Progress: Double;
               Operation: TZFProcessOperation; ProgressPhase: TZFProgressPhase;
               var Cancel: Boolean);
-    procedure OnPassword(Sender: TObject; FileName: string;
+    procedure OnPassword(Sender: TObject; FileName: zipstring;
                         var NewPassword: string; var SkipFile: Boolean);
-    procedure OnProcessFileFailure(Sender: TObject; FileName: string;
+    procedure OnProcessFileFailure(Sender: TObject; FileName: zipstring;
             Operation: TZFProcessOperation; NativeError, ErrorCode: Integer;
-              ErrorMessage: string; var Action: TZFAction);
+              ErrorMessage: zipstring; var Action: TZFAction);
     procedure OnRequestBlankVolume(Sender: TObject;
-            VolumeNumber: Integer; var VolumeFileName: string; var Cancel: Boolean);
+            VolumeNumber: Integer; var VolumeFileName: zipstring; var Cancel: Boolean);
     procedure ClearAttributes();
   end;
 
@@ -697,8 +706,8 @@ begin
   Log(WideFormat(Translator.GetMessage('331'),[FFileName],FS),false, true);  
 end;
 
-procedure TZipper.OnConfirmOverwrite(Sender: TObject; SourceFileName: string;
-  var DestFileName: string; var Confirm: Boolean);
+procedure TZipper.OnConfirmOverwrite(Sender: TObject; SourceFileName: zipstring;
+  var DestFileName: zipstring; var Confirm: Boolean);
 begin
   /// This will never get fired because Overwrite <> omPrompt
   /// but I am just translating from the VCLZip component
@@ -706,7 +715,7 @@ begin
       [SourceFileName, FFileName], FS), false, true);
 end;
 
-procedure TZipper.OnConfirmProcessFile(Sender: TObject; FileName: string;
+procedure TZipper.OnConfirmProcessFile(Sender: TObject; FileName: zipstring;
   Operation: TZFProcessOperation; var Confirm: Boolean);
 begin
   Confirm:= not DoAbort();
@@ -720,7 +729,7 @@ begin
     Log(WideFormat(Translator.GetMessage('333'),[FFileName],FS), false, true);
 end;
 
-procedure TZipper.OnFileProgress(Sender: TObject; FileName: string;
+procedure TZipper.OnFileProgress(Sender: TObject; FileName: zipstring;
   Progress: Double; Operation: TZFProcessOperation;
   ProgressPhase: TZFProgressPhase; var Cancel: Boolean);
 begin
@@ -770,15 +779,15 @@ begin
 end;
 
 
-procedure TZipper.OnPassword(Sender: TObject; FileName: string;
+procedure TZipper.OnPassword(Sender: TObject; FileName: zipstring;
   var NewPassword: string; var SkipFile: Boolean);
 begin
   NewPassword := AnsiString(FPassword);
 end;
 
-procedure TZipper.OnProcessFileFailure(Sender: TObject; FileName: string;
+procedure TZipper.OnProcessFileFailure(Sender: TObject; FileName: zipstring;
   Operation: TZFProcessOperation; NativeError, ErrorCode: Integer;
-  ErrorMessage: string; var Action: TZFAction);
+  ErrorMessage: zipstring; var Action: TZFAction);
 begin
   if (not FCheckingCRC) then
     Log(WideFormat(Translator.GetMessage('337'),
@@ -789,7 +798,7 @@ begin
 end;
 
 procedure TZipper.OnRequestBlankVolume(Sender: TObject; VolumeNumber: Integer;
-  var VolumeFileName: string; var Cancel: Boolean);
+  var VolumeFileName: zipstring; var Cancel: Boolean);
 begin
   /// Add the parts into the list
   FFileResults.Add(WideString(VolumeFileName));

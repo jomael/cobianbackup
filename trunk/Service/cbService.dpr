@@ -13,6 +13,8 @@
 
 program cbService;
 
+{$INCLUDE TntCompilers.inc}
+
 uses
   SvcMgr,
   service_Main in 'service_Main.pas' {CobBMService: TService},
@@ -23,7 +25,9 @@ uses
 {$R *.RES}
 
 begin
+{$IFDEF COMPILER_9_UP}
   if not Application.DelayInitialize or Application.Installing then
+{$ENDIF}  
     Application.Initialize;
   Application.CreateForm(TCobBMService, CobBMService);
   Application.Run;

@@ -15,6 +15,8 @@ unit interface_Task;
 
 interface
 
+{$INCLUDE CobianCompilers.inc}
+
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, TntForms, ComCtrls, TntComCtrls, StdCtrls, TntStdCtrls, ExtCtrls,
@@ -331,7 +333,8 @@ var
 implementation
 
 uses bmConstants, bmTranslator, interface_Common, CobCommonW,
-  WideStrings, CobEncrypt, bmCustomize, CobDialogsW, TntSysUtils,
+  {$IFDEF COMPILER_9_UP} WideStrings, {$ENDIF}
+  CobEncrypt, bmCustomize, CobDialogsW, TntSysUtils,
   interface_Services, interface_FTP, ShellApi;
 
 {$R *.dfm}

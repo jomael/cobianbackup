@@ -11,6 +11,8 @@
 
 program CobVSrv;
 
+{$INCLUDE TntCompilers.inc}
+
 uses
   SvcMgr,
   unit_Main in 'unit_Main.pas' {CobVrsSrv: TService},
@@ -20,7 +22,9 @@ uses
 {$R *.RES}
 
 begin
+{$IFDEF COMPILER_9_UP}
   if not Application.DelayInitialize or Application.Installing then
+{$ENDIF}
     Application.Initialize;
   Application.CreateForm(TCobVrsSrv, CobVrsSrv);
   Application.Run;

@@ -1,0 +1,71 @@
+#------------------------------------------------------------------------------
+VERSION = BWS.01
+#------------------------------------------------------------------------------
+!ifndef ROOT
+ROOT = $(MAKEDIR)\..
+!endif
+#------------------------------------------------------------------------------
+MAKE = $(ROOT)\bin\make.exe -$(MAKEFLAGS) -f$**
+DCC = $(ROOT)\bin\dcc32.exe $**
+BRCC = $(ROOT)\bin\brcc32.exe $**
+#------------------------------------------------------------------------------
+PROJECTS = Cobian.exe cbEngine.dll cbInterface.exe cbNTW.dll cbNTSecW.dll \
+  cbDecryptorW.dll cbDecryptorW.exe cbService.exe cbDecompressor.exe \
+  cbTranslator.exe cbSerial.exe FMSImg32.dll cbUninstall.exe cbSetup.exe \
+  CobVSrvUI.exe CobVSrv.exe cbBuilder.exe
+#------------------------------------------------------------------------------
+default: $(PROJECTS)
+#------------------------------------------------------------------------------
+
+Cobian.exe: Application\Cobian.dpr
+  $(DCC)
+
+cbEngine.dll: Engine\cbEngine.dpr
+  $(DCC)
+
+cbInterface.exe: Interface\cbInterface.dpr
+  $(DCC)
+
+cbNTW.dll: CobNTW\cbNTW.dpr
+  $(DCC)
+
+cbNTSecW.dll: CobNTSecW\cbNTSecW.dpr
+  $(DCC)
+
+cbDecryptorW.dll: CobDecryptorW\cbDecryptorW.dpr
+  $(DCC)
+
+cbDecryptorW.exe: CobDecryptor StandAlone\cbDecryptorW.dpr
+  $(DCC)
+
+cbService.exe: Service\cbService.dpr
+  $(DCC)
+
+cbDecompressor.exe: CobDecompressor\cbDecompressor.dpr
+  $(DCC)
+
+cbTranslator.exe: Translator\cbTranslator.dpr
+  $(DCC)
+
+cbSerial.exe: Serial generator\cbSerial.dpr
+  $(DCC)
+
+FMSImg32.dll: Fake MSImg32\FMSImg32.dpr
+  $(DCC)
+
+cbUninstall.exe: Uninstall\cbUninstall.dpr
+  $(DCC)
+
+cbSetup.exe: Setup\cbSetup.dpr
+  $(DCC)
+
+CobVSrvUI.exe: Cobian Version Server\Interface\CobVSrvUI.dpr
+  $(DCC)
+
+CobVSrv.exe: Cobian Version Server\Service\CobVSrv.dpr
+  $(DCC)
+
+cbBuilder.exe: Builder\cbBuilder.dpr
+  $(DCC)
+
+

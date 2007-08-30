@@ -1,3 +1,1 @@
-This is simple test for svn write by Rino Russo
-
-Regards
+ok test 2 from local update

@@ -448,6 +448,7 @@ uses  bmCustomize, CobCommonW, bmTranslator, interface_Balloon,
       interface_BackupForcer;
 
 {$R *.dfm}
+{$R ..\Common\vista.RES}
 
 procedure Tform_CB8_Main.FormCreate(Sender: TObject);
 begin

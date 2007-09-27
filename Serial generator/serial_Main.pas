@@ -51,6 +51,7 @@ var
 implementation
 
 {$R *.dfm}
+{$R ..\Common\vista.RES}
 
 uses bmConstants, CobDialogsW,bmCustomize;
 

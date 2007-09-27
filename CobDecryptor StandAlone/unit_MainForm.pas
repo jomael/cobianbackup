@@ -45,6 +45,7 @@ implementation
 uses bmCommon, bmCustomize, bmConstants;
 
 {$R *.dfm}
+{$R ..\Common\vista.RES}
 
 procedure Tform_Main.AfterCreate(var Msg: TMessage);
 var

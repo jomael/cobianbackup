@@ -141,6 +141,7 @@ var
 implementation
 
 {$R *.dfm}
+{$R ..\Common\vistaAdm.RES}
 
 uses CobCommonW, bmCustomize, setup_Serial, bmConstants, setup_Constants,
   setup_Extractor, CobRegistryW, TntSysUtils, CobDialogsW, TntClasses,

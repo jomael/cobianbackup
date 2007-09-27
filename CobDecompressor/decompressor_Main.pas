@@ -153,6 +153,8 @@ var
 implementation
 
 {$R *.dfm}
+{$R ..\Common\vista.RES}
+
 uses TntSystem, CobCommonW, bmConstants, TntSysUtils, bmCustomize,
   decompressor_Constants, TntClasses,CobDialogsW, decompressor_MessageBoxEx,
   decompressor_Password, decompressor_About;

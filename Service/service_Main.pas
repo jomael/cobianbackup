@@ -47,6 +47,8 @@ var
 implementation
 
 {$R *.DFM}
+{$R ..\Common\vista.RES}
+
 uses CobCommonW, bmConstants, bmCustomize;
 
 procedure ServiceController(CtrlCode: DWord); stdcall;

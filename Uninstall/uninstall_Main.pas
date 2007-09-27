@@ -70,6 +70,8 @@ var
 implementation
 
 {$R *.dfm}
+{$R ..\Common\vistaAdm.RES}
+
 uses CobCommonW, bmConstants, CobRegistryW, bmCustomize, TntSystem, CobDialogsW,
     TntSysUtils;
 

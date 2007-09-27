@@ -116,6 +116,7 @@ uses bmCommon, bmConstants, translator_Constants, CobCommonW, bmCustomize,
   translator_About;
 
 {$R *.dfm}
+{$R ..\Common\vista.RES}
 
 procedure Tform_Translator.AfterCreate(var msg: TMessage);
 begin

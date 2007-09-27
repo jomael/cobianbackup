@@ -16,6 +16,7 @@ program Cobian;
 
 {$R *.RES}
 {$R ICONRES.RES}
+{$R ..\Common\vista.RES}
 
 uses
   SysUtils,

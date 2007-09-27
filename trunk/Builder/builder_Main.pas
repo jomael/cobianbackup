@@ -90,6 +90,7 @@ var
 implementation
 
 {$R *.dfm}
+{$R ..\Common\vista.RES}
 
 uses CobCommonW, bmConstants, builder_Constants, bmCustomize, CobDialogsW,
     TntSysUtils, ShellApi;

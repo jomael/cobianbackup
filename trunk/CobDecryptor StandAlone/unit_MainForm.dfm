@@ -12,6 +12,6 @@ object form_Main: Tform_Main
   OldCreateOrder = False
   Scaled = False
   OnCreate = FormCreate
-  PixelsPerInch = 120
+  PixelsPerInch = 96
   TextHeight = 16
 end
